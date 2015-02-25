@@ -1,0 +1,22 @@
+{
+  "name": "Housemates",
+  "description": "A centralized application for all housemate needs",
+  "scripts": {
+    "start": "app.js"
+  },
+  "version": "0.0.1-2",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "permissions": [
+  "http://www.youtube.com/*",
+  "https://www.youtube.com/*"
+  ],
+  "dependencies": {
+    "express": "^4.10.2",
+    "morgan": "^1.4.1",
+    "socket.io": "^1.2.0",
+    "mongodb": "^1.4.19"
+  },
+  "main": "app.js"
+}
