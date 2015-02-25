@@ -2,20 +2,20 @@ var messageRoutes = require('./routes/serverSocket.js');
 var express = require('express');
 var morgan = require('morgan'); //for static files
 // var bson = require('bson');
-var passport = require('passport'), FacebookStrategy = require('passport-facebook').Strategy;
+// var passport = require('passport'), FacebookStrategy = require('passport-facebook').Strategy;
 
-passport.use(new FacebookStrategy({
-    clientID: '342347555966814',
-    clientSecret: '376925f96f4449f2af1f6773d5eaa443',
-    callbackURL: "http://localhost:50000/"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    User.findOrCreate(function(err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
-  }
-));
+// passport.use(new FacebookStrategy({
+//     clientID: '342347555966814',
+//     clientSecret: '376925f96f4449f2af1f6773d5eaa443',
+//     callbackURL: "http://localhost:50000/"
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//     User.findOrCreate(function(err, user) {
+//       if (err) { return done(err); }
+//       done(null, user);
+//     });
+//   }
+// ));
 
 
 
@@ -47,9 +47,9 @@ app.get("/:houseName", function(req, response) {
  
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
+// app.get('/auth/facebook', passport.authenticate('facebook'));
+// app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/',
+//                                       failureRedirect: '/login' }));
 
 
 

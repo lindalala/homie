@@ -26,7 +26,7 @@ exports.init = function(io) {
         socket.on('new house', function (houseName){
             console.log('new house event was hit');
             // console.log(houseName);
-            houseModel.addNewHouse("houses", houseName, function(crsr){});
+            houseModel.addNewHouse("housemates", houseName, function(crsr){});
         });
         socket.on('disconnect', function(data){
             console.log('a user disconnected');
