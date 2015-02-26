@@ -19,7 +19,7 @@
     <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '342347555966814',
+      appId      : process.env.FBAPP_ID,
       xfbml      : true,
       version    : 'v2.2'
     });
@@ -71,7 +71,7 @@
 
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '342347555966814',
+    appId      : process.env.FBAPP_ID,
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
