@@ -20,6 +20,7 @@ var LinearGradient = require('react-native-linear-gradient');
 // App views
 var Views = {};
 Views.Homes = require('./views/Homes.js');
+Views.AppNavigator = require('./views/AppNavigator.js');
 
 // Statuses
 var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
@@ -172,7 +173,7 @@ var Homie = React.createClass({
     } else if (this.state.status === STATUS.NEW) {
       return this.renderLogInView();
     } else if (this.state.status === STATUS.RETURNING) {
-      return <Views.Homes/>;
+      return <Views.AppNavigator />;
     } else {
       console.error("Error: STATUS unknown");
     }

@@ -65,7 +65,8 @@ var HomesView = React.createClass({
   },
 
   renderView() {
-    return (<View style={styles.background}>
+    return (
+      <View style={styles.background}>
         <View style={styles.backgroundOverlay} />
         <View style={styles.contentContainer}>
           <View>
