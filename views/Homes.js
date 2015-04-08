@@ -13,21 +13,25 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {};
-Views.CreateHouse = require('./CreateHouse.js');
-Views.JoinHouse = require('./JoinHouse.js');
+Views.CreateHome = require('./CreateHome.js');
+Views.JoinHome = require('./JoinHome.js');
+Views.Home = require('./Home.js');
 
+// Statuses
+var STATUS = {CREATE: 0, JOIN: 1, ENTER: 2, HOMES: 3};
 
 var HomesView = React.createClass({
   getInitialState() {
     return {
+      status: STATUS.HOMES,
       houses: null,
-      curUserName: Parse.User.current().get('name')
+      curUserName: Parse.User.current().get('name'),
+      selectedHouseId: null
     }
   },
 
   createHouse() {
-    //return <Views.CreateHouse user={this.props.user}/>;
-    console.log("creating...");
+    this.setState({status: STATUS.CREATE});
   },
 
   joinHouse() {
@@ -35,21 +39,19 @@ var HomesView = React.createClass({
     //return <Views.JoinHouse user={this.props.user}/>;
   },
 
-  enterHouse() {
-    console.log("entering...");
-    //return <Views.House user={this.props.user}/>;
+  enterHouse(id) {
+    this.setState({status: STATUS.ENTER, selectedHouseId: id});
   },
 
   makeHouse(house) {
-    return (<View style={styles.container}>
-              <TouchableHighlight onPress={this.enterHouse(house.id)}>
+    return (<TouchableHighlight onPress={this.enterHouse.bind(this, house.id)}>
                 <View style={styles.button}>
                   <Text style={styles.buttonText}>
-                    {house.name}
+                    {house.get('name')}
                   </Text>
                 </View>
               </TouchableHighlight>
-            </View>);
+            )
   },
 
   renderLoadingView() {
@@ -74,7 +76,7 @@ var HomesView = React.createClass({
 
           <View>
             <Text style={styles.name}>
-            Your Houses:
+            Your Homes:
             </Text>
             <View style={styles.houseList}>
               {this.state.houses}
@@ -110,7 +112,7 @@ var HomesView = React.createClass({
       success: function(homes) {
         // homes is a list of homes Parse.User.current() belongs to
         if (homes.length) {
-          self.setState({houses: homes.map(makeHouse)});
+          self.setState({houses: homes.map(self.makeHouse)});
         } else {
           // Parse.User.current() not currently in house
           self.setState({houses: (<View style={styles.container}>
@@ -127,11 +129,14 @@ var HomesView = React.createClass({
   },
 
   render() {
-    if (this.state.houses) {
-      console.log(this.state.houses);
+    if (this.state.status === STATUS.HOMES) {
       return this.renderView();
+    } else if (this.state.status === STATUS.CREATE) {
+      return <Views.CreateHome/>;
+    } else if (this.state.status === STATUS.ENTER) {
+      return <Views.Home houseId={this.state.selectedHouseId}/>;
     } else {
-      return this.renderLoadingView();
+      console.error("Error: STATUS unknown");
     }
   }
 });
@@ -175,14 +180,8 @@ var styles = StyleSheet.create({
     bottom: 0,
   },
   houseList: {
-    position: 'absolute',
-    flex:1,
     justifyContent: 'center',
-    alignItems: 'center',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    alignItems: 'center'
   },
   name: {
     fontSize: 20,

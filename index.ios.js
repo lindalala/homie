@@ -11,7 +11,7 @@ var {
   Image
 } = React;
 var Parse = require('parse').Parse;
-Parse.initialize(YOUR_KEYS);
+Parse.initialize("Tr0epOMYD8xXYa22R3Uc8MhEGMYGLuoA0J05aYv3", "o3ki0HSrtxHj0Dcq4LmJAKrwTLo3BBgpX9awr1p8");
 
 var FacebookLoginManager = require('NativeModules').FacebookLoginManager;
 var Video = require('react-native-video');
@@ -23,6 +23,9 @@ Views.Homes = require('./views/Homes.js');
 
 // Statuses
 var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
+
+// Global Current User
+global.curUser;
 
 var Homie = React.createClass({
   getInitialState() {
@@ -42,6 +45,7 @@ var Homie = React.createClass({
           success: function(user) {
             // log in success
             self.setState({status: STATUS.RETURNING});
+            global.curUser = user;
           },
           error: function(user, error) {
             // The login failed. Check error to see why.
@@ -95,9 +99,11 @@ var Homie = React.createClass({
         // Hooray! Store username and password.
         AsyncStorage.setItem("@Homie:user", this.state.user.id + ':' + pw, (error) => {
           if (error) {
-            // this._appendMessage('AsyncStorage error: ' + error.message);
+            this._appendMessage('AsyncStorage error: ' + error.message);
           } else {
-            // this._appendMessage('Saved user info to disk');
+            // sucessfully stored user data to disk
+            this.setState({status: STATUS.RETURNING});
+            global.curUser = user;
           }
         });
       }.bind(this),

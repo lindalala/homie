@@ -14,20 +14,11 @@ var Parse = require('parse').Parse;
 // App views
 var Views = {};
 
-var HomesView = React.createClass({
-  saveHouse() {
-    var House = Parse.Object.extend('House');
-    var house = new House();
+var HomeView = React.createClass({
+  getInitialState() {
+    return {
 
-    var homies = house.relation('homies');
-    homies.add(Parse.User.current());
-
-    // house.set("playerName", "Sean Plott");
-    // house.set("cheatMode", false);
-  },
-
-  joinHouse() {
-    return <Views.JoinHouse user={this.props.user}/>;
+    }
   },
 
   render() {
@@ -36,25 +27,10 @@ var HomesView = React.createClass({
         <View style={styles.contentContainer}>
           <View>
             <Text style={styles.name}>
-              Welcome {'\n'} {this.props.user.name}!
+              Invite your homies with your house ID:
+              {'\n'} {this.props.houseId}
             </Text>
           </View>
-
-          <TouchableHighlight onPress={this.createHouse}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>
-                Create New House
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this.joinHouse}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>
-                Join House
-              </Text>
-            </View>
-          </TouchableHighlight>
-
         </View>
       </View>)
   }
@@ -97,4 +73,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = HomesView;
+module.exports = HomeView;
