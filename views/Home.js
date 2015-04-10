@@ -28,7 +28,7 @@ var HomeView = React.createClass({
           <View>
             <Text style={styles.name}>
               Invite your homies with your house ID:
-              {'\n'} {this.props.houseId}
+              {'\n'} {this.props.route.data.houseId}
             </Text>
           </View>
         </View>
@@ -38,30 +38,17 @@ var HomeView = React.createClass({
 
 var styles = StyleSheet.create({
   contentContainer: {
-    position: 'absolute',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-  background: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+
   },
   backgroundOverlay: {
     opacity: 0.85,
     backgroundColor: '#ffffff',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  },
+  background: {
+    flex: 1
   },
   name: {
     fontSize: 20,
