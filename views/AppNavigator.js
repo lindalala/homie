@@ -1,28 +1,62 @@
 var React = require('react-native');
+var CoreStyle = require('./CoreStyle.js');
 var {
   StyleSheet,
   View,
   Navigator
 } = React;
-
-var CoreStyle = require('./CoreStyle.js');
+var {
+  Text
+} = CoreStyle;
 var NavigationBar = require('react-native-navbar');
 
 // App views
 var Views = {};
-Views.Homes = require('./Homes.js');
+Views.Home = require('./Home.js');
+Views.Setup = require('./Setup.js');
 
 var AppNavigatorView = React.createClass({
+  getInitialState() {
+    return {
+      defaultHouseId: null,
+      loading: true,
+    }
+  },
+
+  componentDidMount() {
+    var defaultHouseRelation = global.curUser.relation('defaultHouse');
+    var query = defaultHouseRelation.query();
+    var self = this;
+    query.find({
+      success:function(list) {
+        if (list.length) {
+          self.setState({defaultHouseId: list[0].id, loading: false});
+        }
+      }
+    });
+  },
+
+  renderLoadingView() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.loginButton}>
+          <Text style={styles.buttonText}>
+            LOADING
+          </Text>
+        </View>
+      </View>
+    );
+  },
 
   renderScene(route, navigator) {
     var Component = route.component;
     var navBar = route.navBar;
-    var title = route.title;
 
     if (navBar) {
       navBar = <NavigationBar navigator={navigator}
-                              title={title}
-                              backgroundColor="#fa3" />;
+                              title={route.title}
+                              backgroundColor="#fa3"
+                              hidePrev={route.hidePrev} />;
     }
 
     return (
@@ -34,18 +68,35 @@ var AppNavigatorView = React.createClass({
   },
 
   render() {
-    return (
-      <Navigator
-        renderScene={this.renderScene}
-        debugOverlay={false}
-        style={styles.navigator}
-        initialRoute={{
-          component: Views.Homes,
+    if (this.state.loading) {
+      return this.renderLoadingView();
+    } else {
+      var initRoute;
+      if (this.state.defaultHouseId) {
+        // route to default home
+        initRoute = {
+          component: Views.Home,
           navBar: true,
-          title: 'Homes'
-        }}
-      />
-    );
+          title: 'Home',
+          data: {houseId: this.state.defaultHouseId},
+        }
+      } else {
+        // route to create/join house
+        initRoute = {
+          component: Views.Setup,
+          navBar: false,
+        }
+      }
+
+      return (
+        <Navigator
+          renderScene={this.renderScene}
+          debugOverlay={false}
+          style={styles.navigator}
+          initialRoute={initRoute}
+        />
+      );
+    }
   }
 });
 

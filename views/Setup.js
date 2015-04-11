@@ -18,7 +18,7 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {};
-Views.AppNavigator = require('./AppNavigator.js');
+Views.Home = require('./Home.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
@@ -137,7 +137,7 @@ var SetupView = React.createClass({
 
   render() {
     if (this.state.status === STATUS.ENTER) {
-      return <Views.AppNavigator />;
+      return <Views.Homes />;
     } else {
       return this.renderView();
     }

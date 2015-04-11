@@ -25,7 +25,7 @@ var HomesView = React.createClass({
     return {
       houses: null,
       curUserName: Parse.User.current().get('name'),
-      selectedHouseId: null
+      selectedHouseId: null,
     }
   },
 
@@ -69,7 +69,7 @@ var HomesView = React.createClass({
   componentDidMount() {
     var self = this;
     // query for houses that contain Parse.User.current()
-    var House = Parse.Object.extend("House");
+    var House = Parse.Object.extend('House');
     var houseQuery = new Parse.Query(House);
     houseQuery.equalTo('homies', Parse.User.current());
     houseQuery.find({

@@ -19,9 +19,7 @@ var LinearGradient = require('react-native-linear-gradient');
 
 // App views
 var Views = {};
-Views.Homes = require('./views/Homes.js');
 Views.AppNavigator = require('./views/AppNavigator.js');
-Views.Setup = require('./views/Setup.js');
 
 // Statuses
 var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
@@ -33,7 +31,7 @@ var Homie = React.createClass({
   getInitialState() {
     return {
       result: '',
-      status: STATUS.LOADING
+      status: STATUS.LOADING,
     }
   },
 
@@ -46,8 +44,8 @@ var Homie = React.createClass({
         Parse.User.logIn(username, pass, {
           success: function(user) {
             // log in success
-            self.setState({status: STATUS.RETURNING});
             global.curUser = user;
+            self.setState({status: STATUS.RETURNING});
           },
           error: function(user, error) {
             // The login failed. Check error to see why.
@@ -174,8 +172,7 @@ var Homie = React.createClass({
     } else if (this.state.status === STATUS.NEW) {
       return this.renderLogInView();
     } else if (this.state.status === STATUS.RETURNING) {
-      //return <Views.AppNavigator />;
-      return <Views.Setup />;
+      return <Views.AppNavigator />;
     } else {
       console.error("Error: STATUS unknown");
     }
