@@ -1,3 +1,3 @@
 ## Homie
 
-** Final project for a course -- currently in progress! **
+**Final project for a course -- currently in progress!**
