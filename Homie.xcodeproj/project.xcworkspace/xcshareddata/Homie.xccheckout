@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>6A82A195-594F-4B7F-A006-9182C5206E9B</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Homie</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>5D25A2E39ACB5841C2F93D4E5F99D6EBBE173E01</key>
 		<string>https://github.com/paulokuda/housemates.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Homie.xcodeproj</string>
+	<string>Homie.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>5D25A2E39ACB5841C2F93D4E5F99D6EBBE173E01</key>

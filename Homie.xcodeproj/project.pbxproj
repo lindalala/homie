@@ -27,7 +27,6 @@
 		ABA0F7D71AD4B27E00BA01BA /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */; };
 		ABFD32BF1ACBB8FF00BC5018 /* FacebookLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */; };
 		ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ABFD32C01ACBC05900BC5018 /* background.mp4 */; };
-		ABFD32C81ACBC18D00BC5018 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFD32C71ACBC0F900BC5018 /* libRCTVideo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,13 +93,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		ABFD32C61ACBC0F900BC5018 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ABFD32C21ACBC0F900BC5018 /* RCTVideo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTVideo;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -128,7 +120,6 @@
 		ABFD32BD1ACBB8FF00BC5018 /* FacebookLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacebookLoginManager.h; path = iOS/FacebookLoginManager.h; sourceTree = "<group>"; };
 		ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacebookLoginManager.m; path = iOS/FacebookLoginManager.m; sourceTree = "<group>"; };
 		ABFD32C01ACBC05900BC5018 /* background.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.mp4; sourceTree = "<group>"; };
-		ABFD32C21ACBC0F900BC5018 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,7 +141,6 @@
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
-				ABFD32C81ACBC18D00BC5018 /* libRCTVideo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +229,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				ABFD32C21ACBC0F900BC5018 /* RCTVideo.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -290,14 +279,6 @@
 				ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		ABFD32C31ACBC0F900BC5018 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ABFD32C71ACBC0F900BC5018 /* libRCTVideo.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,10 +349,6 @@
 				{
 					ProductGroup = 00C302E01ABCB9EE00DB3ED1 /* Products */;
 					ProjectRef = 00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */;
-				},
-				{
-					ProductGroup = ABFD32C31ACBC0F900BC5018 /* Products */;
-					ProjectRef = ABFD32C21ACBC0F900BC5018 /* RCTVideo.xcodeproj */;
 				},
 				{
 					ProductGroup = 00481BDC1AC0C7FA00671115 /* Products */;
@@ -451,13 +428,6 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ABFD32C71ACBC0F900BC5018 /* libRCTVideo.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTVideo.a;
-			remoteRef = ABFD32C61ACBC0F900BC5018 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

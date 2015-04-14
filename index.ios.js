@@ -14,7 +14,6 @@ var Parse = require('parse').Parse;
 Parse.initialize("Tr0epOMYD8xXYa22R3Uc8MhEGMYGLuoA0J05aYv3", "o3ki0HSrtxHj0Dcq4LmJAKrwTLo3BBgpX9awr1p8");
 
 var FacebookLoginManager = require('NativeModules').FacebookLoginManager;
-var Video = require('react-native-video');
 var LinearGradient = require('react-native-linear-gradient');
 
 // App views
@@ -65,7 +64,8 @@ var Homie = React.createClass({
       if (error) {
         this.setState({result: error});
       } else {
-        this.setState({token: info.token, userId: info.userId});
+        this.setState({userId: info.userId});
+
         this.getUser();
       }
     });
@@ -129,8 +129,6 @@ var Homie = React.createClass({
   renderLogInView() {
     return (
       <View style={styles.container}>
-        <Video source={"background"} style={styles.backgroundVideo} repeat={true} />
-
         <TouchableHighlight onPress={this.login}>
           <View style={styles.loginButton}>
             <Text style={styles.buttonText}>
@@ -150,7 +148,6 @@ var Homie = React.createClass({
   renderLoggedInView() {
     return (
       <View style={styles.background}>
-        <Video source={"background"} style={styles.backgroundVideo} repeat={true} />
         <View style={styles.backgroundOverlay} />
 
         <View style={styles.contentContainer}>
