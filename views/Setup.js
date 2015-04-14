@@ -38,19 +38,18 @@ var SetupView = React.createClass({
 
     var self = this;
     house.save().then(function(house) {
-      // house saved successfully.
-    }, function(error) {
-      // the save failed.
-      alert('Failed to create new object, with error code: ' + error.message);
-    }).then(function() {
-      self.setState({status: STATUS.ENTER, houseId: house.id});
       var homies = house.relation('homies');
       homies.add(global.curUser);
-      house.save();
-    }).then(function(){
-      var defaultHouse = global.curUser.relation('defaultHouse');
-      defaultHouse.add(house);
-      global.curUser.save();
+      house.save().then(function(house) {
+        self.storeDefault(house);
+        self.props.navigator.push({
+          navBar: true,
+          title: house.get('name'),
+          component: Views.Home,
+          hidePrev: true,
+          data: {houseId: house.id}
+        });
+      });
     });
   },
 
@@ -64,12 +63,17 @@ var SetupView = React.createClass({
         // The object was retrieved successfully.
         var homies = house.relation('homies');
         homies.add(global.curUser);
-        var defaultHouse = global.curUser.relation('defaultHouse');
-        defaultHouse.add(house);
 
         global.curUser.save().then(function() {
           house.save().then(function() {
-            self.setState({status: STATUS.ENTER, houseId: house.id});
+            self.storeDefault(house);
+            self.props.navigator.push({
+              navBar: true,
+              title: house.get('name'),
+              component: Views.Home,
+              hidePrev: true,
+              data: {houseId: house.id}
+            });
           });
         });
       },
@@ -81,13 +85,14 @@ var SetupView = React.createClass({
     });
   },
 
-  enterHouse(name, id) {
-    // Navigate to Home view
-    this.props.navigator.push({
-      navBar: true,
-      title: name,
-      component: Views.Home,
-      data: {houseId: id}
+  storeDefault(house) {
+    AsyncStorage.setItem("@Homie:defaultHouse", house.id, (error) => {
+      if (error) {
+        self._appendMessage('AsyncStorage error: ' + error.message);
+      } else {
+        // sucessfully stored user data to disk
+        global.defaultHouse = house;
+      }
     });
   },
 
@@ -136,11 +141,7 @@ var SetupView = React.createClass({
   },
 
   render() {
-    if (this.state.status === STATUS.ENTER) {
-      return <Views.Homes />;
-    } else {
-      return this.renderView();
-    }
+    return this.renderView();
   }
 });
 

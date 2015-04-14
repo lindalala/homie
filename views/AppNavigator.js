@@ -3,7 +3,8 @@ var CoreStyle = require('./CoreStyle.js');
 var {
   StyleSheet,
   View,
-  Navigator
+  Navigator,
+  AsyncStorage
 } = React;
 var {
   Text
@@ -24,14 +25,30 @@ var AppNavigatorView = React.createClass({
   },
 
   componentDidMount() {
-    var defaultHouseRelation = global.curUser.relation('defaultHouse');
-    var query = defaultHouseRelation.query();
     var self = this;
-    query.find({
-      success:function(list) {
-        if (list.length) {
-          self.setState({defaultHouseId: list[0].id, loading: false});
-        }
+    console.log('j');
+    AsyncStorage.getItem('@Homie:defaultHouse', (error, value) => {
+      if (value !== null) {
+        // value is default id
+        self.setState({defaultHouseId: value, loading: true});
+        var House = Parse.Object.extend('House');
+        var query = new Parse.Query(House);
+        query.get(value, {
+          success: function(defHouse) {
+            // The object was retrieved successfully.
+            global.defaultHouse = defHouse;
+            self.setState({loading: false});
+          },
+          error: function(object, error) {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+            console.error(error);
+            self.setState({loading: false});
+          }
+        });
+      } else {
+        // no default yet
+        self.setState({loading: false});
       }
     });
   },
@@ -72,12 +89,13 @@ var AppNavigatorView = React.createClass({
       return this.renderLoadingView();
     } else {
       var initRoute;
-      if (this.state.defaultHouseId) {
+      if (global.defaultHouse) {
         // route to default home
         initRoute = {
           component: Views.Home,
           navBar: true,
-          title: 'Home',
+          title: global.defaultHouse.get('name'),
+          hidePrev: true,
           data: {houseId: this.state.defaultHouseId},
         }
       } else {

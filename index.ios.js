@@ -23,14 +23,15 @@ Views.AppNavigator = require('./views/AppNavigator.js');
 // Statuses
 var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
 
-// Global Current User
+// Globals
 global.curUser;
+global.defaultHouse;
 
 var Homie = React.createClass({
   getInitialState() {
     return {
       result: '',
-      status: STATUS.LOADING,
+      status: STATUS.LOADING
     }
   },
 
@@ -48,7 +49,7 @@ var Homie = React.createClass({
           },
           error: function(user, error) {
             // The login failed. Check error to see why.
-            console.error('Error: ' + error);
+            console.error(error);
             self.setState({status: STATUS.NEW});
           }
         });
@@ -62,10 +63,9 @@ var Homie = React.createClass({
   login() {
     FacebookLoginManager.newSession((error, info) => {
       if (error) {
-        this.setState({result: error});
+        this.setState({result: error, status: -1});
       } else {
-        this.setState({userId: info.userId});
-
+        this.setState({token: info.token, userId: info.userId});
         this.getUser();
       }
     });
@@ -80,7 +80,7 @@ var Homie = React.createClass({
         .then((responseData) => {
           this.setState({user: responseData});
           this.createUser();
-        })
+        });
     }
   },
 
@@ -94,19 +94,20 @@ var Homie = React.createClass({
     user.set("firstName", this.state.user.first_name);
     user.set("lastName", this.state.user.last_name);
 
+    var self = this;
     user.signUp(null, {
       success: function(user) {
         // Hooray! Store username and password.
-        AsyncStorage.setItem("@Homie:user", this.state.user.id + ':' + pw, (error) => {
+        AsyncStorage.setItem("@Homie:user", self.state.user.id + ':' + pw, (error) => {
           if (error) {
-            this._appendMessage('AsyncStorage error: ' + error.message);
+            self._appendMessage('AsyncStorage error: ' + error.message);
           } else {
             // sucessfully stored user data to disk
-            this.setState({status: STATUS.RETURNING});
             global.curUser = user;
+            self.setState({status: STATUS.RETURNING});
           }
         });
-      }.bind(this),
+      },
       error: function(user, error) {
         // Show the error message somewhere and let the user try again.
         alert("Error: " + error.code + " " + error.message);
@@ -143,24 +144,6 @@ var Homie = React.createClass({
         </TouchableHighlight>
       </View>
     );
-  },
-
-  renderLoggedInView() {
-    return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-
-        <View style={styles.contentContainer}>
-          <View>
-            <Image source={{uri: this.state.user.picture.data.url}}
-                   style={styles.profilePicture} />
-            <Text style={styles.name}>
-              Welcome {'\n'} {this.state.user.name}!
-            </Text>
-          </View>
-        </View>
-      </View>
-    )
   },
 
   render() {
