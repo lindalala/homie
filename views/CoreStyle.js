@@ -2,14 +2,22 @@ Object.assign = require('object-assign');
 var React = require('react-native');
 var {
   StyleSheet,
-  Text
+  Text,
+  TouchableOpacity,
+  Image,
+  Navigator
 } = React;
 
 var CoreStyle = {};
 
 CoreStyle.Text = React.createClass({
+  getDefaultProps() {
+    return {
+      style: {}
+    }
+  },
   render() {
-    return <Text style={[this.styles.style, this.props.style]}>{this.props.children}</Text>
+    return <Text style={[this.styles.style, this.props.style]}>{this.props.children}</Text>;
   },
   styles: StyleSheet.create({
     style: {
@@ -36,6 +44,54 @@ CoreStyle.Button = React.createClass({
   })
 });
 
+CoreStyle.CustomPrevButton = React.createClass({
+  render() {
+    return (
+      <TouchableOpacity onPress={this.props.onPress}>
+        <Image
+          style={this.styles.button}
+          source={require('image!noteIcon')}
+        />
+      </TouchableOpacity>
+    );
+  },
+  styles: StyleSheet.create({
+    button: {
+      flex: 1,
+      width: 38,
+      height: 38,
+    }
+  })
+});
+
+CoreStyle.CustomPlusButton = React.createClass({
+  render() {
+    return (
+      <TouchableOpacity onPress={this._onPress}>
+        <Image
+          style={this.styles.button}
+          source={require('image!noteIcon')}
+        />
+      </TouchableOpacity>
+    );
+  },
+  _onPress() {
+    this.props.navigator.push({
+      navBar: true,
+      title: this.props.title,
+      message: 'Swipe down to dismiss',
+      sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
+      component: this.props.plusView
+    });
+  },
+  styles: StyleSheet.create({
+    button: {
+      flex: 1,
+      width: 38,
+      height: 38,
+    }
+  })
+});
 
 
 CoreStyle.colors = {

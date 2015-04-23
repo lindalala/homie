@@ -1,4 +1,5 @@
 var React = require('react-native');
+var CoreStyle = require('./CoreStyle.js');
 var {
   AppRegistry,
   AsyncStorage,
@@ -6,13 +7,20 @@ var {
   Text,
   View,
   TouchableHighlight,
-  Image
+  Image,
+  Navigator
 } = React;
+var {
+  CustomPrevButton,
+  CustomPlusButton
+} = CoreStyle;
 
 var Parse = require('parse').Parse;
 
 // App views
 var Views = {};
+Views.Notes = require('./Notes.js');
+Views.AddNote = require('./AddNote.js');
 
 var HomeView = React.createClass({
   getInitialState() {
@@ -21,16 +29,27 @@ var HomeView = React.createClass({
     }
   },
 
+  notesPressed() {
+    this.props.navigator.push({
+      navBar: true,
+      title: 'Notes',
+      component: Views.Notes,
+      hidePrev: false,
+      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'}/>,
+    });
+  },
+
   render() {
     return (<View style={styles.background}>
         <View style={styles.backgroundOverlay} />
         <View style={styles.contentContainer}>
-          <View>
-            <Text style={styles.name}>
-              Invite your homies with your house ID:
-              {'\n'} {this.props.route.data.houseId}
-            </Text>
-          </View>
+          <TouchableHighlight onPress={this.notesPressed}>
+            <Image
+              style={styles.button}
+              source={require('image!noteIcon')}
+            />
+          </TouchableHighlight>
+
         </View>
       </View>)
   }
@@ -58,6 +77,11 @@ var styles = StyleSheet.create({
     marginTop: 15,
     alignSelf: 'center',
   },
+  button: {
+    flex: 1,
+    width: 38,
+    height: 38,
+  }
 });
 
 module.exports = HomeView;

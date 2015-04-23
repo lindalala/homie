@@ -26,7 +26,6 @@ var AppNavigatorView = React.createClass({
 
   componentDidMount() {
     var self = this;
-    console.log('j');
     AsyncStorage.getItem('@Homie:defaultHouse', (error, value) => {
       if (value !== null) {
         // value is default id
@@ -65,6 +64,13 @@ var AppNavigatorView = React.createClass({
     );
   },
 
+  configureScene(route, navigator) {
+    if (route.sceneConfig) {
+      return route.sceneConfig;
+    }
+    return Navigator.SceneConfigs.FloatFromRight;
+  },
+
   renderScene(route, navigator) {
     var Component = route.component;
     var navBar = route.navBar;
@@ -73,7 +79,10 @@ var AppNavigatorView = React.createClass({
       navBar = <NavigationBar navigator={navigator}
                               title={route.title}
                               backgroundColor="#fa3"
-                              hidePrev={route.hidePrev} />;
+                              hidePrev={route.hidePrev}
+                              customPrev={route.customPrev}
+                              customNext={route.customNext}
+                              onNext={route.onNext}/>;
     }
 
     return (
@@ -109,6 +118,7 @@ var AppNavigatorView = React.createClass({
       return (
         <Navigator
           renderScene={this.renderScene}
+          configureScene={this.configureScene}
           debugOverlay={false}
           style={styles.navigator}
           initialRoute={initRoute}

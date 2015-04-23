@@ -25,6 +25,7 @@
 		ABA0F7D51AD4B27E00BA01BA /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */; };
 		ABA0F7D61AD4B27E00BA01BA /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D21AD4B27E00BA01BA /* FBSDKLoginKit.framework */; };
 		ABA0F7D71AD4B27E00BA01BA /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */; };
+		ABA367051AE6F1B000388C4B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA367041AE6F1B000388C4B /* Images.xcassets */; };
 		ABFD32BF1ACBB8FF00BC5018 /* FacebookLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */; };
 		ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ABFD32C01ACBC05900BC5018 /* background.mp4 */; };
 /* End PBXBuildFile section */
@@ -117,6 +118,7 @@
 		ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = iOS/Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		ABA0F7D21AD4B27E00BA01BA /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = iOS/Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = iOS/Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		ABA367041AE6F1B000388C4B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABFD32BD1ACBB8FF00BC5018 /* FacebookLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacebookLoginManager.h; path = iOS/FacebookLoginManager.h; sourceTree = "<group>"; };
 		ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacebookLoginManager.m; path = iOS/FacebookLoginManager.m; sourceTree = "<group>"; };
 		ABFD32C01ACBC05900BC5018 /* background.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.mp4; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				ABA367041AE6F1B000388C4B /* Images.xcassets */,
 				ABFD32C01ACBC05900BC5018 /* background.mp4 */,
 				ABFD32BC1ACBB57200BC5018 /* Frameworks */,
 				13B07FAE1A68108700A75B9A /* Homie */,
@@ -438,6 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */,
+				ABA367051AE6F1B000388C4B /* Images.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
