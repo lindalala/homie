@@ -99,7 +99,8 @@ CoreStyle.CustomPlusButton = React.createClass({
 
 
 CoreStyle.colors = {
-  background: '#eee'
+  background: '#eee',
+  paleBlue: '#eef',
 };
 
 

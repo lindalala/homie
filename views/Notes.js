@@ -2,12 +2,14 @@ var React = require('react-native');
 var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
 var {
+  ActivityIndicatorIOS,
   AsyncStorage,
   StyleSheet,
   View,
   TouchableHighlight,
   TouchableOpacity,
-  Image
+  Image,
+  ListView
 } = React;
 var {
   Text
@@ -25,32 +27,30 @@ var STATUS = {ENTER: 0, SETUP: 1};
 var NotesView = React.createClass({
   getInitialState() {
     return {
-      notes: null,
+      dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
       loading: true
     }
   },
 
-  renderNote(note) {
+  componentDidMount() {
+    this.fetchData();
+  },
+
+  fetchNote(note) {
     var authorRelation = note.relation('author');
     var query = authorRelation.query();
     return query.find().then(function(list) {
       var author = list[0];
-      return (
-        <View style={styles.note}>
-          <Text>
-            {note.get('title')}{'\n'}
-          </Text>
-          <Text>
-            {note.get('content')}{'\n'}
-            By: {author.get('name')} {'\n'}
-            {moment(note.createdAt).fromNow()}
-          </Text>
-        </View>
-      )
+      return {
+        title: note.get('title'),
+        content: note.get('content'),
+        author: author.get('name'),
+        createdAt: moment(note.createdAt).fromNow()
+      }
     });
   },
 
-  componentDidMount() {
+  fetchData() {
     var self = this;
     // query for notes that are in current house
     var Note = Parse.Object.extend('Note');
@@ -60,9 +60,12 @@ var NotesView = React.createClass({
       success: function(notes) {
         // notes is a list of notes in curHouse
         if (notes.length) {
-          var notesAndAuthor = notes.map(self.renderNote);
-          Promise.all(notesAndAuthor).then(function(notes) {
-            self.setState({notes:notes, loading: false});
+          var fetchedNotes = notes.map(self.fetchNote);
+          Promise.all(fetchedNotes).then(function(notes) {
+            self.setState({
+              dataSource: self.state.dataSource.cloneWithRows(notes),
+              loading: false
+            });
           });
         } else {
           // no notes found
@@ -75,89 +78,58 @@ var NotesView = React.createClass({
     });
   },
 
-  componentWillReceiveProps() {
-    alert('I will refreshed');
-  },
-
-  renderView() {
-    return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <View>
-            <View style={styles.houseList}>
-              {this.state.notes}
-            </View>
-          </View>
-        </View>
-      </View>);
+  renderNoteCell(note) {
+    return (<NoteCell title={note.title}
+                      content={note.content}
+                      author={note.author}
+                      createdAt={note.createdAt} />);
   },
 
   render() {
-    if (this.state.loading) {
-      return (<View style={styles.background}>
-                <View style={styles.backgroundOverlay} />
-                <View style={styles.contentContainer}>
-                  <Text>
-                    LOADING
-                  </Text>
-                </View>
-              </View>);
-    }
-    return this.renderView();
+    var content = this.state.loading ?
+                    <ActivityIndicatorIOS /> :
+                    (<ListView
+                      style={styles.notesList}
+                      dataSource={this.state.dataSource}
+                      renderRow={this.renderNoteCell}/>);
+
+    return (
+      <View style={styles.contentContainer}>
+        {content}
+      </View>);
+  }
+});
+
+var NoteCell = React.createClass({
+  render() {
+    return (
+      <View style={styles.note}>
+        <Text>
+          {this.props.title}{'\n'}
+        </Text>
+        <Text>
+          {this.props.content}{'\n'}
+          By: {this.props.author} {'\n'}
+          {moment(this.props.createdAt).fromNow()}
+        </Text>
+      </View>);
   }
 });
 
 var styles = StyleSheet.create({
   contentContainer: {
+    flex:1
+  },
+  notesList: {
     flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  buttonContents: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 3,
-    paddingVertical: 10,
-  },
-  background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
+    backgroundColor: '#fff',
+    paddingTop: 1
   },
   note: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
-  },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
-  textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+    backgroundColor: CoreStyle.colors.paleBlue,
+    marginTop: 1,
+    marginBottom: 1,
+    padding: 25
   }
 });
 
