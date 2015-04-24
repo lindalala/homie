@@ -14,7 +14,6 @@ var Parse = require('parse').Parse;
 Parse.initialize("Tr0epOMYD8xXYa22R3Uc8MhEGMYGLuoA0J05aYv3", "o3ki0HSrtxHj0Dcq4LmJAKrwTLo3BBgpX9awr1p8");
 
 var FacebookLoginManager = require('NativeModules').FacebookLoginManager;
-var LinearGradient = require('react-native-linear-gradient');
 
 // App views
 var Views = {};
@@ -62,6 +61,7 @@ var Homie = React.createClass({
 
   login() {
     FacebookLoginManager.newSession((error, info) => {
+      console.log('error');
       if (error) {
         this.setState({result: error, status: -1});
       } else {

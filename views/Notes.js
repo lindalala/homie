@@ -12,6 +12,8 @@ var {
   ListView
 } = React;
 var {
+  H1,
+  H2,
   Text
 } = CoreStyle;
 
@@ -45,7 +47,7 @@ var NotesView = React.createClass({
         title: note.get('title'),
         content: note.get('content'),
         author: author.get('name'),
-        createdAt: moment(note.createdAt).fromNow()
+        createdAt: note.createdAt
       }
     });
   },
@@ -104,12 +106,10 @@ var NoteCell = React.createClass({
   render() {
     return (
       <View style={styles.note}>
-        <Text>
-          {this.props.title}{'\n'}
-        </Text>
-        <Text>
-          {this.props.content}{'\n'}
-          By: {this.props.author} {'\n'}
+        <H1 style={{marginBottom: 5}}>{this.props.title}</H1>
+        <H2><H2 style={{fontFamily: 'MetaPro'}}>by</H2> {this.props.author}</H2>
+        <Text style={{marginTop: 15, marginBottom: 15}}>{this.props.content}</Text>
+        <Text style={{color: CoreStyle.colors.lightPurple}}>
           {moment(this.props.createdAt).fromNow()}
         </Text>
       </View>);

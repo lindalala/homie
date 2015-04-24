@@ -9,9 +9,7 @@
     "moment": "^2.10.2",
     "object-assign": "*",
     "parse": "*",
-    "parse-react": "*",
-    "react-native": "*",
-    "react-native-linear-gradient": "^0.2.0",
-    "react-native-navbar": "^0.4.6"
+    "react-native": "^0.4.0",
+    "react-native-navbar": "*"
   }
 }

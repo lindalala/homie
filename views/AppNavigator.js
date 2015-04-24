@@ -9,7 +9,7 @@ var {
 var {
   Text
 } = CoreStyle;
-var NavigationBar = require('react-native-navbar');
+var NavigationBar = require('./NavigationBar.js');
 
 // App views
 var Views = {};
@@ -79,11 +79,11 @@ var AppNavigatorView = React.createClass({
     if (navBar) {
       navBar = <NavigationBar navigator={navigator}
                               title={route.title}
-                              backgroundColor="#fa3"
+                              backgroundColor={CoreStyle.colors.lightPurple}
                               hidePrev={route.hidePrev}
                               customPrev={route.customPrev}
                               customNext={route.customNext}
-                              onNext={route.onNext}/>;
+                              onNext={route.onNext} />;
     }
 
     return (
@@ -101,7 +101,7 @@ var AppNavigatorView = React.createClass({
       if (global.curHouse) {
         // route to default home
         initRoute = {
-          component: Views.Notes,//Home,
+          component: Views.Home,
           navBar: true,
           title: global.curHouse.get('name'),
           hidePrev: true,

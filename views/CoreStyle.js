@@ -10,6 +10,13 @@ var {
 
 var CoreStyle = {};
 
+CoreStyle.colors = {
+  background: '#eee',
+  paleBlue: '#eef',
+  darkPurple:'#3b3e82',
+  lightPurple: '#7a73d0'
+};
+
 CoreStyle.Text = React.createClass({
   getDefaultProps() {
     return {
@@ -17,13 +24,45 @@ CoreStyle.Text = React.createClass({
     }
   },
   render() {
-    return <Text style={[this.styles.style, this.props.style]}>{this.props.children}</Text>;
+    return (<Text style={[this.styles.style, this.props.style]}>
+      {this.props.children}
+    </Text>);
   },
   styles: StyleSheet.create({
     style: {
-      color: 'red',
       fontWeight: 'bold',
       fontFamily: 'Metapro',
+      color: CoreStyle.colors.darkPurple
+      /* also there's MetaBook-Roman and MetaBold-Roman (this one's boldest)*/
+    },
+  })
+});
+CoreStyle.H1 = React.createClass({
+  render() {
+    return (<CoreStyle.Text style={[this.styles.style, this.props.style]}>
+      {this.props.children}
+    </CoreStyle.Text>);
+  },
+  styles: StyleSheet.create({
+    style: {
+      color: CoreStyle.colors.darkPurple,
+      fontSize: 26,
+      fontFamily: 'MetaBold-Roman',
+      /* also there's MetaBook-Roman and MetaBold-Roman (this one's boldest)*/
+    },
+  })
+});
+CoreStyle.H2 = React.createClass({
+  render() {
+    return (<CoreStyle.Text style={[this.styles.style, this.props.style]}>
+      {this.props.children}
+    </CoreStyle.Text>);
+  },
+  styles: StyleSheet.create({
+    style: {
+      color: CoreStyle.colors.lightPurple,
+      fontSize: 16,
+      fontFamily: 'MetaBold-Roman',
       /* also there's MetaBook-Roman and MetaBold-Roman (this one's boldest)*/
     },
   })
@@ -96,12 +135,6 @@ CoreStyle.CustomPlusButton = React.createClass({
     }
   })
 });
-
-
-CoreStyle.colors = {
-  background: '#eee',
-  paleBlue: '#eef',
-};
 
 
 module.exports = CoreStyle;

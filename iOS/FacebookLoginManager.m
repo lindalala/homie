@@ -16,6 +16,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(newSession:(RCTResponseSenderBlock)callback) {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logOut]; //TODO: investigate further, cause of 304 errors
     [login logInWithReadPermissions:@[@"public_profile", @"email"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         
         if (error) {
