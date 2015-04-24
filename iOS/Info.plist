@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Meta-bold-roman.ttf</string>
+		<string>Meta-book-roman.ttf</string>
+		<string>MetaPro-BookItalic.otf</string>
+		<string>MetaPro-Medium.otf</string>
+		<string>MetaPro-MediumItalic.otf</string>
+		<string>MetaPro-Normal_30266.ttf</string>
+		<string>MetaPro-Normal.otf</string>
+		<string>MetaPro-NormalItalic.otf</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

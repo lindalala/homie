@@ -28,6 +28,14 @@
 		ABA367051AE6F1B000388C4B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABA367041AE6F1B000388C4B /* Images.xcassets */; };
 		ABFD32BF1ACBB8FF00BC5018 /* FacebookLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */; };
 		ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ABFD32C01ACBC05900BC5018 /* background.mp4 */; };
+		D1BF40241AE9A0E900A72538 /* MetaPro-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401C1AE9A0E900A72538 /* MetaPro-BookItalic.otf */; };
+		D1BF40251AE9A0E900A72538 /* MetaPro-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401D1AE9A0E900A72538 /* MetaPro-Medium.otf */; };
+		D1BF40261AE9A0E900A72538 /* MetaPro-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401E1AE9A0E900A72538 /* MetaPro-MediumItalic.otf */; };
+		D1BF40271AE9A0E900A72538 /* MetaPro-Normal_30266.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401F1AE9A0E900A72538 /* MetaPro-Normal_30266.ttf */; };
+		D1BF40281AE9A0E900A72538 /* MetaPro-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF40201AE9A0E900A72538 /* MetaPro-Normal.otf */; };
+		D1BF40291AE9A0E900A72538 /* MetaPro-NormalItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF40211AE9A0E900A72538 /* MetaPro-NormalItalic.otf */; };
+		D1BF402A1AE9A0E900A72538 /* Meta-bold-roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF40221AE9A0E900A72538 /* Meta-bold-roman.ttf */; };
+		D1BF402B1AE9A0E900A72538 /* Meta-book-roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF40231AE9A0E900A72538 /* Meta-book-roman.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +130,14 @@
 		ABFD32BD1ACBB8FF00BC5018 /* FacebookLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacebookLoginManager.h; path = iOS/FacebookLoginManager.h; sourceTree = "<group>"; };
 		ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacebookLoginManager.m; path = iOS/FacebookLoginManager.m; sourceTree = "<group>"; };
 		ABFD32C01ACBC05900BC5018 /* background.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.mp4; sourceTree = "<group>"; };
+		D1BF401C1AE9A0E900A72538 /* MetaPro-BookItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-BookItalic.otf"; sourceTree = "<group>"; };
+		D1BF401D1AE9A0E900A72538 /* MetaPro-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-Medium.otf"; sourceTree = "<group>"; };
+		D1BF401E1AE9A0E900A72538 /* MetaPro-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-MediumItalic.otf"; sourceTree = "<group>"; };
+		D1BF401F1AE9A0E900A72538 /* MetaPro-Normal_30266.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-Normal_30266.ttf"; sourceTree = "<group>"; };
+		D1BF40201AE9A0E900A72538 /* MetaPro-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-Normal.otf"; sourceTree = "<group>"; };
+		D1BF40211AE9A0E900A72538 /* MetaPro-NormalItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-NormalItalic.otf"; sourceTree = "<group>"; };
+		D1BF40221AE9A0E900A72538 /* Meta-bold-roman.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Meta-bold-roman.ttf"; sourceTree = "<group>"; };
+		D1BF40231AE9A0E900A72538 /* Meta-book-roman.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Meta-book-roman.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,6 +276,7 @@
 				ABFD32C01ACBC05900BC5018 /* background.mp4 */,
 				ABFD32BC1ACBB57200BC5018 /* Frameworks */,
 				13B07FAE1A68108700A75B9A /* Homie */,
+				D1BF400A1AE99EE600A72538 /* Resources */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 			);
@@ -282,6 +299,29 @@
 				ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D1BF400A1AE99EE600A72538 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D1BF402C1AE9A0ED00A72538 /* Fonts */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		D1BF402C1AE9A0ED00A72538 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D1BF401C1AE9A0E900A72538 /* MetaPro-BookItalic.otf */,
+				D1BF401D1AE9A0E900A72538 /* MetaPro-Medium.otf */,
+				D1BF401E1AE9A0E900A72538 /* MetaPro-MediumItalic.otf */,
+				D1BF401F1AE9A0E900A72538 /* MetaPro-Normal_30266.ttf */,
+				D1BF40201AE9A0E900A72538 /* MetaPro-Normal.otf */,
+				D1BF40211AE9A0E900A72538 /* MetaPro-NormalItalic.otf */,
+				D1BF40221AE9A0E900A72538 /* Meta-bold-roman.ttf */,
+				D1BF40231AE9A0E900A72538 /* Meta-book-roman.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -440,10 +480,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1BF40241AE9A0E900A72538 /* MetaPro-BookItalic.otf in Resources */,
+				D1BF40261AE9A0E900A72538 /* MetaPro-MediumItalic.otf in Resources */,
+				D1BF40271AE9A0E900A72538 /* MetaPro-Normal_30266.ttf in Resources */,
+				D1BF402A1AE9A0E900A72538 /* Meta-bold-roman.ttf in Resources */,
 				ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */,
 				ABA367051AE6F1B000388C4B /* Images.xcassets in Resources */,
+				D1BF402B1AE9A0E900A72538 /* Meta-book-roman.ttf in Resources */,
+				D1BF40251AE9A0E900A72538 /* MetaPro-Medium.otf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				D1BF40291AE9A0E900A72538 /* MetaPro-NormalItalic.otf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				D1BF40281AE9A0E900A72538 /* MetaPro-Normal.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,8 +21,11 @@ CoreStyle.Text = React.createClass({
   },
   styles: StyleSheet.create({
     style: {
-      color: 'red'
-    }
+      color: 'red',
+      fontWeight: 'bold',
+      fontFamily: 'Metapro',
+      /* also there's MetaBook-Roman and MetaBold-Roman (this one's boldest)*/
+    },
   })
 });
 
