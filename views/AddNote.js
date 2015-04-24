@@ -8,7 +8,8 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ScrollView
 } = React;
 var {
   Text
@@ -57,13 +58,9 @@ var AddNoteView = React.createClass({
 
   renderView() {
     return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
+      <ScrollView>
         <View style={styles.contentContainer}>
-          <Text>
-            {this.state.noteAdded}
-          </Text>
-          <View style={styles.buttonContents}>
+          <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
               onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
@@ -74,16 +71,17 @@ var AddNoteView = React.createClass({
               onChange={(text) => this.setState({inputText: text.nativeEvent.text})}
               placeholder="type note here"
             />
+          </View>
           <TouchableOpacity onPress={this.addNote}>
               <View style={styles.loginButton}>
                 <Text style={styles.buttonText}>
                   Post Note
                 </Text>
               </View>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      </View>);
+      </ScrollView>
+    );
   },
 
   render() {
@@ -98,7 +96,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'stretch',
   },
-  buttonContents: {
+  textInputContainer: {
     flexDirection: 'column',
     flex: 1,
     justifyContent: 'center',
@@ -134,7 +132,7 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInput: {
-    height: 5,
+    height: 45,
     borderWidth: 0.5,
     borderColor: '#0f0f0f',
     padding: 4,
