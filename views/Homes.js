@@ -71,7 +71,7 @@ var HomesView = React.createClass({
     // query for houses that contain Parse.User.current()
     var House = Parse.Object.extend('House');
     var houseQuery = new Parse.Query(House);
-    houseQuery.equalTo('homies', Parse.User.current());
+    houseQuery.equalTo('homies', global.curUser);
     houseQuery.find({
       success: function(homes) {
         // homes is a list of homes Parse.User.current() belongs to

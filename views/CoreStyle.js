@@ -89,9 +89,10 @@ CoreStyle.CustomPlusButton = React.createClass({
   },
   styles: StyleSheet.create({
     button: {
-      flex: 1,
-      width: 38,
-      height: 38,
+      width: 24,
+      height: 24,
+      right: 10,
+      bottom: 5
     }
   })
 });

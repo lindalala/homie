@@ -91,7 +91,7 @@ var SetupView = React.createClass({
         self._appendMessage('AsyncStorage error: ' + error.message);
       } else {
         // sucessfully stored user data to disk
-        global.defaultHouse = house;
+        global.curHouse = house;
       }
     });
   },

@@ -22,28 +22,33 @@ Views.Loading = require('./Loading.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
-var NotesView = React.createClass({
+var ShoppingItemsView = React.createClass({
   getInitialState() {
     return {
-      notes: null,
+      shopList: null,
+      items: [],
+      renderedItems: [],
       loading: true
     }
   },
 
-  renderNote(note) {
-    var authorRelation = note.relation('author');
+  enterList() {
+
+  },
+
+  renderItem(item) {
+    var authorRelation = item.relation('author');
     var query = authorRelation.query();
     return query.find().then(function(list) {
       var author = list[0];
       return (
         <View style={styles.note}>
           <Text>
-            {note.get('title')}{'\n'}
+            {item.get('name')}{'\n'}
           </Text>
           <Text>
-            {note.get('content')}{'\n'}
-            By: {author.get('name')} {'\n'}
-            {moment(note.createdAt).fromNow()}
+            Requested By: {author.get('name')} {'\n'}
+            {moment(item.createdAt).fromNow()}
           </Text>
         </View>
       )
@@ -52,25 +57,24 @@ var NotesView = React.createClass({
 
   componentDidMount() {
     var self = this;
-    // query for notes that are in current house
-    var Note = Parse.Object.extend('Note');
-    var noteQuery = new Parse.Query(Note);
-    noteQuery.equalTo('house', global.curHouse);
-    noteQuery.find({
-      success: function(notes) {
-        // notes is a list of notes in curHouse
-        if (notes.length) {
-          var notesAndAuthor = notes.map(self.renderNote);
-          Promise.all(notesAndAuthor).then(function(notes) {
-            self.setState({notes:notes, loading: false});
-          });
-        } else {
-          // no notes found
-          self.setState({notes: [], loading: false});
-        }
-      },
-      error: function(error) {
-        alert("Error: " + error.code + " " + error.message);
+    // query for items in shopping lists
+    console.log("PROPPPS");
+    console.log(this.props);
+    var shopList = this.props.navigator.route.data.shopList;
+    var relation = shopList.relation('items');
+    var query = relation.query();
+    query.find().then(function(itemsList) {
+      if (itemsList.length) {
+        var renderedItems = itemsList.map(self.renderItem);
+        Promise.all(renderedItems).then(function(items) {
+          self.setState({shopList: shopList,
+                            items: itemsList,
+                    renderedItems: items,
+                          loading: false});
+        });
+      } else {
+        // no items found
+        self.setState({shopList: shopList, loading: false});
       }
     });
   },
@@ -86,7 +90,7 @@ var NotesView = React.createClass({
         <View style={styles.contentContainer}>
           <View>
             <View style={styles.houseList}>
-              {this.state.notes}
+              {this.state.renderedItems}
             </View>
           </View>
         </View>
@@ -138,7 +142,7 @@ var styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center'
   },
-  note: {
+  list: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10
@@ -161,4 +165,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = NotesView;
+module.exports = ShoppingItemsView;

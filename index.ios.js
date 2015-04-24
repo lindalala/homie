@@ -25,7 +25,7 @@ var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
 
 // Globals
 global.curUser;
-global.defaultHouse;
+global.curHouse;
 
 var Homie = React.createClass({
   getInitialState() {

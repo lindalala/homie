@@ -19,54 +19,66 @@ var Parse = require('parse').Parse;
 var Views = {};
 Views.Home = require('./Home.js');
 Views.Loading = require('./Loading.js');
+Views.ShoppingItems = require('./ShoppingItems.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
-var NotesView = React.createClass({
+var ShoppingView = React.createClass({
   getInitialState() {
     return {
-      notes: null,
+      lists: null,
       loading: true
     }
   },
 
-  renderNote(note) {
-    var authorRelation = note.relation('author');
-    var query = authorRelation.query();
-    return query.find().then(function(list) {
-      var author = list[0];
+  enterList(shopList) {
+    this.props.navigator.push({
+      navBar: true,
+      title: shopList.get('title'),
+      component: Views.ShoppingItems,
+      data: {shopList: shopList},
+      hidePrev: false,
+    });
+  },
+
+  renderList(shopList) {
+    var self = this;
+    var itemRel = shopList.relation('items');
+    var query = itemRel.query();
+    return query.find().then(function(items) {
+      var numItems = items.length;
       return (
-        <View style={styles.note}>
-          <Text>
-            {note.get('title')}{'\n'}
-          </Text>
-          <Text>
-            {note.get('content')}{'\n'}
-            By: {author.get('name')} {'\n'}
-            {moment(note.createdAt).fromNow()}
-          </Text>
-        </View>
+        <TouchableOpacity onPress={self.enterList.bind(null, shopList)}>
+          <View style={styles.list}>
+            <Text>
+              {shopList.get('title')}{'\n'}
+            </Text>
+            <Text>
+              {numItems} Items
+            </Text>
+          </View>
+        </TouchableOpacity>
       )
     });
   },
 
   componentDidMount() {
     var self = this;
-    // query for notes that are in current house
-    var Note = Parse.Object.extend('Note');
-    var noteQuery = new Parse.Query(Note);
-    noteQuery.equalTo('house', global.curHouse);
-    noteQuery.find({
-      success: function(notes) {
-        // notes is a list of notes in curHouse
-        if (notes.length) {
-          var notesAndAuthor = notes.map(self.renderNote);
-          Promise.all(notesAndAuthor).then(function(notes) {
-            self.setState({notes:notes, loading: false});
+    // query for shopping lists that are in current house
+    var ShopList = Parse.Object.extend('ShoppingList');
+    var shopQ = new Parse.Query(ShopList);
+    shopQ.equalTo('house', global.curHouse);
+    shopQ.find({
+      success: function(lists) {
+        // lists is a list of shopping lists in curHouse
+        if (lists.length) {
+          var renderedLists = lists.map(self.renderList);
+          Promise.all(renderedLists).then(function(lists) {
+            self.setState({lists: lists, loading: false});
           });
         } else {
           // no notes found
-          self.setState({notes: [], loading: false});
+          self.setState({lists: [], loading: false});
         }
       },
       error: function(error) {
@@ -86,7 +98,7 @@ var NotesView = React.createClass({
         <View style={styles.contentContainer}>
           <View>
             <View style={styles.houseList}>
-              {this.state.notes}
+              {this.state.lists}
             </View>
           </View>
         </View>
@@ -138,7 +150,7 @@ var styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center'
   },
-  note: {
+  list: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10
@@ -161,4 +173,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = NotesView;
+module.exports = ShoppingView;

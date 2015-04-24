@@ -22,7 +22,7 @@ Views.Loading = require('./Loading.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
-var NotesView = React.createClass({
+var BillsView = React.createClass({
   getInitialState() {
     return {
       notes: null,
@@ -31,15 +31,13 @@ var NotesView = React.createClass({
   },
 
   renderNote(note) {
+    console.log(Date.parse(note.createdAt));
     var authorRelation = note.relation('author');
     var query = authorRelation.query();
-    return query.find().then(function(list) {
+    return authorRelation.query().find().then(function(list) {
       var author = list[0];
       return (
         <View style={styles.note}>
-          <Text>
-            {note.get('title')}{'\n'}
-          </Text>
           <Text>
             {note.get('content')}{'\n'}
             By: {author.get('name')} {'\n'}
@@ -161,4 +159,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = NotesView;
+module.exports = BillsView;

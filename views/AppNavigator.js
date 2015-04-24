@@ -15,6 +15,7 @@ var NavigationBar = require('react-native-navbar');
 var Views = {};
 Views.Home = require('./Home.js');
 Views.Setup = require('./Setup.js');
+Views.Notes = require('./Notes.js');
 
 var AppNavigatorView = React.createClass({
   getInitialState() {
@@ -35,7 +36,7 @@ var AppNavigatorView = React.createClass({
         query.get(value, {
           success: function(defHouse) {
             // The object was retrieved successfully.
-            global.defaultHouse = defHouse;
+            global.curHouse = defHouse;
             self.setState({loading: false});
           },
           error: function(object, error) {
@@ -92,18 +93,17 @@ var AppNavigatorView = React.createClass({
       </View>
     );
   },
-
   render() {
     if (this.state.loading) {
       return this.renderLoadingView();
     } else {
       var initRoute;
-      if (global.defaultHouse) {
+      if (global.curHouse) {
         // route to default home
         initRoute = {
           component: Views.Home,
           navBar: true,
-          title: global.defaultHouse.get('name'),
+          title: global.curHouse.get('name'),
           hidePrev: true,
           data: {houseId: this.state.defaultHouseId},
         }
@@ -122,6 +122,7 @@ var AppNavigatorView = React.createClass({
           debugOverlay={false}
           style={styles.navigator}
           initialRoute={initRoute}
+          onWillFocus={this.onWillFocus}
         />
       );
     }

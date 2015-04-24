@@ -22,12 +22,37 @@ Views.Home = require('./Home.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
-var LoadingView = React.createClass({
+var AddBillView = React.createClass({
   getInitialState() {
     return {
-      input: null,
-      status: STATUS.SETUP,
+      inputTitle: null,
+      inputText: null,
+      noteAdded: null
     }
+  },
+
+  addNote() {
+    var Note = Parse.Object.extend('Note');
+    var note = new Note();
+
+    note.set('title', this.state.inputTitle);
+    note.set('content', this.state.inputText);
+
+    var self = this;
+    note.save().then(function(note) {
+      // house saved successfully.
+    }, function(error) {
+      // the save failed.
+      alert('Failed to create new object, with error code: ' + error.message);
+    }).then(function() {
+      var house = note.relation('house');
+      var author = note.relation('author');
+      house.add(global.curHouse);
+      author.add(global.curUser);
+      note.save();
+    }).then(function() {
+      self.props.navigator.pop();
+    });
   },
 
   renderView() {
@@ -35,7 +60,28 @@ var LoadingView = React.createClass({
       <View style={styles.background}>
         <View style={styles.backgroundOverlay} />
         <View style={styles.contentContainer}>
-          <Text> LOADING </Text>
+          <Text>
+            {this.state.noteAdded}
+          </Text>
+          <View style={styles.buttonContents}>
+            <TextInput
+              style={styles.textInput}
+              onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
+              placeholder="title"
+            />
+            <TextInput
+              style={styles.textInput}
+              onChange={(text) => this.setState({inputText: text.nativeEvent.text})}
+              placeholder="type note here"
+            />
+          <TouchableOpacity onPress={this.addNote}>
+              <View style={styles.loginButton}>
+                <Text style={styles.buttonText}>
+                  Post Note
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>);
   },
@@ -97,4 +143,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = LoadingView;
+module.exports = AddBillView;
