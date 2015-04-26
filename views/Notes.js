@@ -20,9 +20,11 @@ var {
 var Parse = require('parse').Parse;
 
 // App views
-var Views = {};
-Views.Home = require('./Home.js');
-Views.Loading = require('./Loading.js');
+var Views = {
+  Home: require('./Home.js'),
+  Loading: require('./Loading.js')
+};
+
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
@@ -89,7 +91,7 @@ var NotesView = React.createClass({
 
   render() {
     var content = this.state.loading ?
-                    <ActivityIndicatorIOS /> :
+                    <Views.Loading /> :
                     (<ListView
                       style={styles.notesList}
                       dataSource={this.state.dataSource}
@@ -122,7 +124,7 @@ var styles = StyleSheet.create({
   },
   notesList: {
     flex:1,
-    backgroundColor: '#fff',
+    backgroundColor: CoreStyle.colors.background,
     paddingTop: 1
   },
   note: {

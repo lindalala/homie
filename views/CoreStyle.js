@@ -4,17 +4,23 @@ var {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
   Image,
+  TextInput,
   Navigator
 } = React;
 
 var CoreStyle = {};
 
 CoreStyle.colors = {
-  background: '#eee',
-  paleBlue: '#eef',
+  background: '#fff',
+  paleBlue: '#ecf3fb',
+  palePurple: '#d8e1f2',
+  mediumBlue: '#cce3ff',
+  lightPurple: '#7a73d0',
   darkPurple:'#3b3e82',
-  lightPurple: '#7a73d0'
+  paleYellow: '#fff3b4'
 };
 
 CoreStyle.Text = React.createClass({
@@ -23,8 +29,14 @@ CoreStyle.Text = React.createClass({
       style: {}
     }
   },
+  setNativeProps: function(props) {
+    this.refs.textNode.setNativeProps(props);
+    // Do nothing.
+    // This method is required in order to use this view as a Touchable* child.
+    // See ensureComponentIsNative.js for more info
+  },
   render() {
-    return (<Text style={[this.styles.style, this.props.style]}>
+    return (<Text ref="textNode" style={[this.styles.style, this.props.style]}>
       {this.props.children}
     </Text>);
   },
@@ -68,40 +80,61 @@ CoreStyle.H2 = React.createClass({
   })
 });
 
-CoreStyle.Button = React.createClass({
+CoreStyle.TextInput = React.createClass({
   render() {
-    return (
-      <TouchableOpacity onPress={this._onPressButton}>
-        <Image
-          style={styles.button}
-          source={require('image!myButton')}
-        />
-      </TouchableOpacity>
-    );
+    return (<TextInput
+      style={[this.styles.textInput, this.props.style]}
+      onChange={this.props.onChange}
+      placeholder={this.props.placeholder}
+      onSubmitEditing={this.props.onSubmitEditing}
+      onChangeText={this.props.onChangeText}
+      value={this.props.value}
+    />);
   },
   styles: StyleSheet.create({
-    button: {
-      color: 'red'
+    textInput: {
+      fontFamily: 'MetaPro',
+      fontWeight: 'bold',
+      height: 60,
+      borderRadius: 30,
+      borderWidth: 2,
+      borderColor: CoreStyle.colors.mediumBlue,
+      flex: 1,
+      paddingHorizontal: 20,
+      fontSize: 20,
+      backgroundColor: 'white'
     }
   })
 });
 
-CoreStyle.CustomPrevButton = React.createClass({
+CoreStyle.Button = React.createClass({
+  getDefaultProps() {
+    return {
+      text: 'Button'
+    }
+  },
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
-        <Image
-          style={this.styles.button}
-          source={require('image!noteIcon')}
-        />
+      <TouchableOpacity activeOpacity={0.6} onPress={this.props.onPress}>
+        <View style={this.styles.button}>
+          <Text style={this.styles.text}>{this.props.text}</Text>
+        </View>
       </TouchableOpacity>
     );
   },
   styles: StyleSheet.create({
     button: {
-      flex: 1,
-      width: 38,
-      height: 38,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: CoreStyle.colors.mediumBlue,
+      height: 60,
+      borderRadius: 30
+    },
+    text: {
+      fontFamily: 'MetaBold-Roman',
+      fontWeight: 'bold',
+      fontSize: 30,
+      color: CoreStyle.colors.lightPurple
     }
   })
 });
@@ -112,7 +145,7 @@ CoreStyle.CustomPlusButton = React.createClass({
       <TouchableOpacity onPress={this._onPress}>
         <Image
           style={this.styles.button}
-          source={require('image!noteIcon')}
+          source={require('image!add')}
         />
       </TouchableOpacity>
     );
@@ -121,17 +154,16 @@ CoreStyle.CustomPlusButton = React.createClass({
     this.props.navigator.push({
       navBar: true,
       title: this.props.title,
-      message: 'Swipe down to dismiss',
       sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
       component: this.props.plusView
     });
   },
   styles: StyleSheet.create({
     button: {
-      width: 24,
-      height: 24,
+      width: 20,
+      height: 20,
       right: 10,
-      bottom: 5
+      bottom: 8
     }
   })
 });

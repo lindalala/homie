@@ -1,4 +1,5 @@
 var React = require('react-native');
+var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
 var {
   AppRegistry,
@@ -8,82 +9,262 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  DatePickerIOS,
+  PickerIOS,
+  ScrollView
 } = React;
+PickerItemIOS = PickerIOS.Item;
 var {
+  H1,
   Text
 } = CoreStyle;
-
+var Overlay = require('react-native-overlay');
 var Parse = require('parse').Parse;
 
 // App views
 var Views = {};
-Views.Home = require('./Home.js');
+Views.Loading = require('./Loading.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
 var AddBillView = React.createClass({
   getInitialState() {
     return {
+      isDateModalOpen: false,
+      isHousemateModalOpen: false,
       inputTitle: null,
       inputText: null,
-      noteAdded: null
+      inputHousemate: null,
+      availableHousemates: [],
+      noteAdded: null,
+      dueDate: new Date(),
+      loading: true,
+      hmCharges: []
     }
   },
 
-  addNote() {
-    var Note = Parse.Object.extend('Note');
-    var note = new Note();
+  componentDidMount() {
+    var self = this;
+    var homieRelation = global.curHouse.relation('homies');
+    var homieQuery = homieRelation.query();
+    return homieQuery.find().then(function(list) {
+      // list is a list of homies
+      var housemates = [];
+      for (var i=0; i<list.length; i++) {
+        if (list[i].id !== global.curUser.id) {
+          housemates.push({
+            id: list[i].id,
+            target: list[i].get('name')
+          });
+        }
+      }
+      var initHm = housemates.shift();
+      self.setState({availableHousemates: housemates,
+                     hmCharges: [{'amount': 0,
+                                  'target': initHm.target,
+                                  'id': initHm.id}],
+                     loading: false});
+    });
+  },
 
-    note.set('title', this.state.inputTitle);
-    note.set('content', this.state.inputText);
+  openDateModal() {
+    this.setState({isDateModalOpen: true});
+  },
+
+  openHousemateModal() {
+    this.setState({isHousemateModalOpen: true});
+  },
+
+  closeModal() {
+    this.setState({isDateModalOpen: false, isHousemateModalOpen: false});
+  },
+
+  dueDateChanged(date) {
+    this.setState({
+      dueDate: date
+    })
+  },
+
+  addBill() {
+    var Bill = Parse.Object.extend('Bill');
+    var bill = new Bill();
+
+    bill.set('name', this.state.inputName);
+    bill.set('dueDate', this.state.inputDate);
 
     var self = this;
-    note.save().then(function(note) {
-      // house saved successfully.
+    bill.save().then(function(bill) {
+      // bill saved successfully.
     }, function(error) {
       // the save failed.
       alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
-      var house = note.relation('house');
-      var author = note.relation('author');
+      var house = bill.relation('house');
+      var items = bill.relation('items');
       house.add(global.curHouse);
-      author.add(global.curUser);
-      note.save();
+      self.state.hmCharges.each(function(charge){
+        // create BillItem
+        var BillItem = Parse.Object.extend('BillItem');
+        var billItem = new BillItem();
+        billItem.set('amount', hmCharge.amount); // add amount
+        billItem.save().then(function(bItem){
+          // add item to items relation
+          items.add(bItem);
+          // get ower relation
+          var ower = billItem.relation('ower');
+          var query = new Parse.Query(Parse.User);
+          // query for user with matching ID
+          query.equalTo("objectId", charge.id);
+          query.find({
+            success: function(matchedList) {
+              ower.add(matchedList[0]); // add user to relation
+              bItem.save();
+            }
+          });
+        });
+      });
+      bill.save();
     }).then(function() {
       self.props.navigator.pop();
     });
   },
 
-  renderView() {
+  addNewCharge() {
+    this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$push: [{'amount': 0, 'target': 'select housemate'}]})});
+  },
+
+  updateAmount(amt, idx) {
+    var newHmCharge = this.state.hmCharges[idx];
+    newHmCharge.amount = parseFloat(amt).toFixed(2);
+    this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$splice: [[idx,1,newHmCharge]]})});
+  },
+
+  updateTarget(targetIdx, idx) {
+    var newHmCharge = this.state.hmCharges[idx];
+    newHmCharge.target = this.state.availableHousemates[targetIdx].target;
+    newHmCharge.id = this.state.availableHousemates[targetIdx].id;
+    this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$splice: [[idx,1,newHmCharge]]})});
+  },
+
+  renderDateModal() {
     return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <Text>
-            {this.state.noteAdded}
-          </Text>
-          <View style={styles.buttonContents}>
-            <TextInput
-              style={styles.textInput}
-              onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-              placeholder="title"
+      <Overlay isVisible={this.state.isDateModalOpen}>
+        <View style={styles.overlay} pointerEvents="box-none">
+          <View style={styles.modal}>
+            <H1>Due date</H1>
+            <DatePickerIOS
+              date={this.state.dueDate}
+              mode="date"
+              onDateChange={this.dueDateChanged}
             />
-            <TextInput
-              style={styles.textInput}
-              onChange={(text) => this.setState({inputText: text.nativeEvent.text})}
-              placeholder="type note here"
-            />
-          <TouchableOpacity onPress={this.addNote}>
-              <View style={styles.loginButton}>
+          <TouchableOpacity onPress={this.closeModal}>
+              <View>
                 <Text style={styles.buttonText}>
-                  Post Note
+                  Choose
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
-      </View>);
+      </Overlay>);
+  },
+
+  renderHousemateModal(idx) {
+    return (
+      <Overlay isVisible={this.state.isHousemateModalOpen}>
+        <View style={styles.overlay} pointerEvents="box-none">
+          <View style={styles.modal}>
+            <H1>Add housemate</H1>
+            <PickerIOS
+              style={styles.hmPicker}
+              selectedValue={0}
+              onValueChange={(tIdx) => this.updateTarget(tIdx, idx)}>
+              {this.state.availableHousemates.map((hm, idx) => (
+                <PickerItemIOS
+                  key={idx}
+                  value={idx}
+                  label={hm.target}
+                  />
+                )
+              )}
+            </PickerIOS>
+            <TouchableOpacity onPress={this.closeModal}>
+              <View>
+                <Text style={styles.buttonText}>
+                  Add
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Overlay>
+    );
+  },
+
+  renderView() {
+    if (this.state.loading) {
+      return (<View style={styles.contentContainer}>
+                <Views.Loading />
+              </View>)
+    }
+    var self = this;
+    var dateModal = this.renderDateModal();
+    var hmModal = this.renderHousemateModal();
+    var hmCharges = this.state.hmCharges.map(function(charge, idx) {
+      return (
+        <View style={styles.chargeAmt}>
+          <TextInput
+            style={styles.textInput}
+            keyboardType={'decimal-pad'}
+            onEndEditing={(event) => self.updateAmount(event.nativeEvent.text, idx)}
+            placeholder={'$' + charge.amount}
+          />
+          <TouchableOpacity onPress={() => self.openHousemateModal(idx)}>
+              <View style={styles.chargeName}>
+                <Text style={styles.buttonText}>
+                  {charge.target}
+                </Text>
+              </View>
+          </TouchableOpacity>
+        </View>
+      )
+    });
+    return (
+      <ScrollView>
+        <View style={styles.contentContainer}>
+          {dateModal}
+          <View style={styles.buttonContents}>
+            <TextInput
+              style={styles.textInput}
+              onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
+              placeholder="bill name"
+            />
+          <TouchableOpacity onPress={this.openDateModal}>
+            <View>
+              <Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</Text>
+            </View>
+          </TouchableOpacity>
+          <Text>Charge Housemates</Text>
+          {hmCharges}
+          {hmModal}
+          <TouchableOpacity onPress={this.addNewCharge}>
+              <View>
+                <Text style={styles.buttonText}>
+                  + add another housemate
+                </Text>
+              </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.addNote}>
+              <View>
+                <Text style={styles.buttonText}>
+                  add bill
+                </Text>
+              </View>
+          </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>);
   },
 
   render() {
@@ -140,6 +321,32 @@ var styles = StyleSheet.create({
     padding: 4,
     flex: 1,
     fontSize: 13,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(20,20,20,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5
+  },
+  modal: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    alignItems: 'center'
+  },
+  hmPicker: {
+    flex: 1,
+    width: 300
+  },
+  chargeAmt: {
+    width: 50,
+    height: 50
+  },
+  chargeName: {
+    width: 150,
+    height: 40
   }
 });
 

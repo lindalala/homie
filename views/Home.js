@@ -6,7 +6,7 @@ var {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Image,
   Navigator
 } = React;
@@ -64,57 +64,68 @@ var HomeView = React.createClass({
   },
 
   render() {
-    return (<View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <TouchableHighlight onPress={this.notesPressed}>
-            <Image
-              style={styles.button}
-              source={require('image!noteIcon')}
-            />
-          </TouchableHighlight>
+    return (
+      <View style={styles.contentContainer}>
+        <Image style={styles.fridgebg} source={require('image!fridgebg')} />
 
-          <TouchableHighlight onPress={this.billsPressed}>
+        <View style={[styles.fridgeSections, styles.fridgeTop]}>
+          <TouchableOpacity style={styles.touchable} onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!notes')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.shoppingPressed}>
+          <TouchableOpacity onPress={this.billsPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!notes')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.choresPressed}>
+          <TouchableOpacity style={styles.touchable} onPress={this.shoppingPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!shopping')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+        </View>
+        <View style={[styles.fridgeSections, styles.fridgeBottom]}>
+          <TouchableOpacity onPress={this.choresPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!chores')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!settings')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!photos')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={this.notesPressed}>
+            <Image
+              style={styles.button}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!messages')}
+            />
+          </TouchableOpacity>
         </View>
       </View>)
   }
@@ -124,28 +135,37 @@ var styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-
+    alignItems: 'stretch'
   },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff',
-  },
-  background: {
-    flex: 1
-  },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
+  touchable: {
+    backgroundColor: 'transparent'
   },
   button: {
     flex: 1,
-    width: 38,
-    height: 38,
+    width: 75,
+    height: 75,
+    padding: 40,
+    margin: 10
+  },
+  fridgebg: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  fridgeSections: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 50,
+    backgroundColor: 'transparent'
+  },
+  fridgeTop: {
+    paddingTop: 20,
+    flex: 2
+  },
+  fridgeBottom: {
+    flex: 3
   }
 });
 
