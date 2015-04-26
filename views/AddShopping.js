@@ -63,7 +63,6 @@ var AddShoppingView = React.createClass({
       var inputItemsCopy = self.state.inputItems;
       inputItemsCopy.push(self.state.inputText);
       self.state.items.push(item);
-      alert(inputItemsCopy);
       self.setState({
         inputItems: inputItemsCopy,
         inputText: null
@@ -100,7 +99,7 @@ var AddShoppingView = React.createClass({
                 </TouchableOpacity>
             </View>
           </View>
-          <Text> HELLO {this.state.inputItems} </Text>
+          <Text> ITEMS: {this.state.inputItems} </Text>
           <TouchableOpacity onPress={this.addList}>
             <View style={styles.loginButton}>
               <Text style={styles.buttonText}>

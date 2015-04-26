@@ -6,7 +6,7 @@ var {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Image,
   Navigator
 } = React;
@@ -64,59 +64,63 @@ var HomeView = React.createClass({
   },
 
   render() {
-    return (<View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <TouchableHighlight onPress={this.notesPressed}>
+    return (<View style={styles.contentContainer}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!notes')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.billsPressed}>
+          <TouchableOpacity onPress={this.billsPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!notes')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.shoppingPressed}>
+          <TouchableOpacity onPress={this.shoppingPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!shopping')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.choresPressed}>
+          <TouchableOpacity onPress={this.choresPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!chores')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!settings')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!photos')}
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
 
-          <TouchableHighlight onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
-              source={require('image!noteIcon')}
+              resizeMode={Image.resizeMode.contain}
+              source={require('image!messages')}
             />
-          </TouchableHighlight>
-        </View>
-      </View>)
+          </TouchableOpacity>
+        </View>)
   }
 });
 
@@ -124,28 +128,12 @@ var styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff',
-  },
-  background: {
-    flex: 1
-  },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
+    alignItems: 'center'
   },
   button: {
     flex: 1,
-    width: 38,
-    height: 38,
+    width: 40,
+    height: 40,
   }
 });
 

@@ -12,10 +12,13 @@ var {
 var NavigationBar = require('./NavigationBar.js');
 
 // App views
-var Views = {};
-Views.Home = require('./Home.js');
-Views.Setup = require('./Setup.js');
-Views.Notes = require('./Notes.js');
+var Views = {
+  Home: require('./Home.js'),
+  Setup: require('./Setup.js'),
+  Notes: require('./Notes.js'),
+  Shopping: require('./Shopping.js'),
+  Loading: require('./Loading.js')
+};
 
 var AppNavigatorView = React.createClass({
   getInitialState() {
@@ -53,18 +56,6 @@ var AppNavigatorView = React.createClass({
     });
   },
 
-  renderLoadingView() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.loginButton}>
-          <Text style={styles.buttonText}>
-            LOADING
-          </Text>
-        </View>
-      </View>
-    );
-  },
-
   configureScene(route, navigator) {
     if (route.sceneConfig) {
       return route.sceneConfig;
@@ -95,7 +86,7 @@ var AppNavigatorView = React.createClass({
   },
   render() {
     if (this.state.loading) {
-      return this.renderLoadingView();
+      return <Views.Loading  showNavBar={true} />;
     } else {
       var initRoute;
       if (global.curHouse) {
@@ -136,10 +127,10 @@ var styles = StyleSheet.create({
   },
 
   navigator: {
-    alignSelf : 'stretch',
-    overflow : 'hidden',
     flex : 1,
+    backgroundColor: '#545454'
   }
 });
+
 
 module.exports = AppNavigatorView;

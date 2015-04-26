@@ -1,99 +1,51 @@
 var React = require('react-native');
 var CoreStyle = require('./CoreStyle.js');
+var NavigationBar = require('./NavigationBar.js');
 var {
-  AppRegistry,
-  AsyncStorage,
   StyleSheet,
   View,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
-  Image
+  ActivityIndicatorIOS
 } = React;
 var {
   Text
 } = CoreStyle;
 
-var Parse = require('parse').Parse;
-
-// App views
-var Views = {};
-Views.Home = require('./Home.js');
-
-var STATUS = {ENTER: 0, SETUP: 1};
 
 var LoadingView = React.createClass({
-  getInitialState() {
+  getDefaultProps() {
     return {
-      input: null,
-      status: STATUS.SETUP,
+      showNavBar: false
     }
   },
+  render() {
+    var navbar;
+    if (this.props.showNavBar) {
+      navbar = (<NavigationBar navigator={navigator}
+                                backgroundColor={CoreStyle.colors.lightPurple}
+                                hidePrev={true}
+                                hideNext={true} />);
+    }
 
-  renderView() {
     return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <Text> LOADING </Text>
+      <View style={styles.container}>
+        {navbar}
+        <View style={styles.center}>
+          <ActivityIndicatorIOS />
         </View>
       </View>);
-  },
-
-  render() {
-    return this.renderView();
   }
 });
 
 var styles = StyleSheet.create({
-  contentContainer: {
+  container: {
     flex:1,
-    justifyContent: 'center',
     flexDirection: 'column',
+    backgroundColor: CoreStyle.colors.background
+  },
+  center: {
+    flex: 1,
     alignItems: 'stretch',
-  },
-  buttonContents: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 3,
-    paddingVertical: 10,
-  },
-  background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
-  },
-  houseList: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
-  textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+    justifyContent: 'center'
   }
 });
 

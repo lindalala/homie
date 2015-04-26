@@ -16,8 +16,10 @@ Parse.initialize("Tr0epOMYD8xXYa22R3Uc8MhEGMYGLuoA0J05aYv3", "o3ki0HSrtxHj0Dcq4L
 var FacebookLoginManager = require('NativeModules').FacebookLoginManager;
 
 // App views
-var Views = {};
-Views.AppNavigator = require('./views/AppNavigator.js');
+var Views = {
+  AppNavigator: require('./views/AppNavigator.js'),
+  Loading: require('./views/Loading.js')
+};
 
 // Statuses
 var STATUS = {LOADING: 0, NEW: 1, RETURNING: 2};
@@ -61,7 +63,6 @@ var Homie = React.createClass({
 
   login() {
     FacebookLoginManager.newSession((error, info) => {
-      console.log('error');
       if (error) {
         this.setState({result: error, status: -1});
       } else {
@@ -114,19 +115,6 @@ var Homie = React.createClass({
       }
     });
   },
-
-  renderLoadingView() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.loginButton}>
-          <Text style={styles.buttonText}>
-            LOADING
-          </Text>
-        </View>
-      </View>
-    );
-  },
-
   renderLogInView() {
     return (
       <View style={styles.container}>
@@ -148,7 +136,7 @@ var Homie = React.createClass({
 
   render() {
     if (this.state.status === STATUS.LOADING) {
-      return this.renderLoadingView();
+      return <Views.Loading showNavBar={true} />;
     } else if (this.state.status === STATUS.NEW) {
       return this.renderLogInView();
     } else if (this.state.status === STATUS.RETURNING) {

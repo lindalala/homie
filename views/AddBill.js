@@ -1,4 +1,5 @@
 var React = require('react-native');
+var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
 var {
   AppRegistry,
@@ -8,12 +9,15 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  DatePickerIOS,
+  PickerIOS
 } = React;
 var {
+  H1,
   Text
 } = CoreStyle;
-
+var Overlay = require('react-native-overlay');
 var Parse = require('parse').Parse;
 
 // App views
@@ -25,62 +29,151 @@ var STATUS = {ENTER: 0, SETUP: 1};
 var AddBillView = React.createClass({
   getInitialState() {
     return {
+      isDateModalOpen: false,
+      isHousemateModalOpen: false,
       inputTitle: null,
       inputText: null,
-      noteAdded: null
+      noteAdded: null,
+      dueDate: new Date()
     }
   },
 
-  addNote() {
-    var Note = Parse.Object.extend('Note');
-    var note = new Note();
+  openDateModal() {
+    this.setState({isDateModalOpen: true});
+  },
 
-    note.set('title', this.state.inputTitle);
-    note.set('content', this.state.inputText);
+  openHousemateModal() {
+    this.setState({isHousemateModalOpen: true});
+  },
+
+  closeModal() {
+    this.setState({isDateModalOpen: false, isHousemateModalOpen: false});
+  },
+
+  dueDateChanged(date) {
+    this.setState({
+      dueDate: date
+    })
+  },
+
+  addBill() {
+    var Bill = Parse.Object.extend('Bill');
+    var bill = new Bill();
+
+    bill.set('name', this.state.inputName);
+    bill.set('amount', this.state.inputAmount);
+    bill.set('dueDate', this.state.inputDate);
 
     var self = this;
-    note.save().then(function(note) {
-      // house saved successfully.
+    bill.save().then(function(bill) {
+      // bill saved successfully.
     }, function(error) {
       // the save failed.
       alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
-      var house = note.relation('house');
-      var author = note.relation('author');
+      var house = bill.relation('house');
+      var items = bill.relation('items');
       house.add(global.curHouse);
       author.add(global.curUser);
-      note.save();
+      bill.save();
     }).then(function() {
       self.props.navigator.pop();
     });
   },
 
+  renderDateModal() {
+    return (
+      <Overlay isVisible={this.state.isDateModalOpen}>
+        <View style={styles.overlay} pointerEvents="box-none">
+          <View style={styles.modal}>
+            <H1>Due date</H1>
+            <DatePickerIOS
+              date={this.state.dueDate}
+              mode="date"
+              onDateChange={this.dueDateChanged}
+            />
+          <TouchableOpacity onPress={this.closeModal}>
+              <View>
+                <Text style={styles.buttonText}>
+                  Choose
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Overlay>);
+  },
+
+  renderHousemateModal() {
+    return (
+      <Overlay isVisible={this.state.isHousemateModalOpen}>
+        <View style={styles.overlay} pointerEvents="box-none">
+          <View style={styles.modal}>
+            <H1>Add housemate</H1>
+            <PickerIOS
+              
+            />
+            <TouchableOpacity onPress={this.closeModal}>
+              <View>
+                <Text style={styles.buttonText}>
+                  Add
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Overlay>
+    );
+  },
+
   renderView() {
+    var dateModal = this.renderDateModal();
+    var housemateModal = this.renderHousemateModal();
     return (
       <View style={styles.background}>
         <View style={styles.backgroundOverlay} />
         <View style={styles.contentContainer}>
-          <Text>
-            {this.state.noteAdded}
-          </Text>
+          {dateModal}
+          {housemateModal}
           <View style={styles.buttonContents}>
             <TextInput
               style={styles.textInput}
               onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-              placeholder="title"
+              placeholder="bill name"
             />
-            <TextInput
-              style={styles.textInput}
-              onChange={(text) => this.setState({inputText: text.nativeEvent.text})}
-              placeholder="type note here"
-            />
-          <TouchableOpacity onPress={this.addNote}>
-              <View style={styles.loginButton}>
+          <TouchableOpacity onPress={this.openDateModal}>
+            <View>
+              <Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</Text>
+            </View>
+          </TouchableOpacity>
+          <Text>Charge Housemates</Text>
+
+          <TextInput
+            style={styles.textInput}
+            keyboardType={'decimal-pad'}
+            onChange={(text) => this.setState({inputAmount: text.nativeEvent.text})}
+            placeholder="$0.00"
+          />
+          <TextInput
+            style={styles.textInput}
+            onChange={(text) => this.setState({inputAmount: text.nativeEvent.text})}
+            placeholder="housemate's name"
+          />
+
+          <TouchableOpacity onPress={this.openHousemateModal}>
+              <View>
                 <Text style={styles.buttonText}>
-                  Post Note
+                  + add another housemate
                 </Text>
               </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.addNote}>
+              <View>
+                <Text style={styles.buttonText}>
+                  add bill
+                </Text>
+              </View>
+          </TouchableOpacity>
           </View>
         </View>
       </View>);
@@ -140,7 +233,21 @@ var styles = StyleSheet.create({
     padding: 4,
     flex: 1,
     fontSize: 13,
-  }
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(20,20,20,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5
+  },
+  modal: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    alignItems: 'center'
+  },
 });
 
 module.exports = AddBillView;

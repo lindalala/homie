@@ -87,10 +87,6 @@ var ShoppingView = React.createClass({
     });
   },
 
-  componentWillReceiveProps() {
-    alert('I will refreshed');
-  },
-
   renderView() {
     return (
       <View style={styles.background}>

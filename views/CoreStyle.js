@@ -11,10 +11,13 @@ var {
 var CoreStyle = {};
 
 CoreStyle.colors = {
-  background: '#eee',
-  paleBlue: '#eef',
+  background: '#fff',
+  paleBlue: '#ecf3fb',
+  palePurple: '#d8e1f2',
+  mediumBlue: '#cce3ff',
+  lightPurple: '#7a73d0',
   darkPurple:'#3b3e82',
-  lightPurple: '#7a73d0'
+  paleYellow: '#fff3b4'
 };
 
 CoreStyle.Text = React.createClass({
@@ -23,8 +26,14 @@ CoreStyle.Text = React.createClass({
       style: {}
     }
   },
+  setNativeProps: function(props) {
+    this.refs.textNode.setNativeProps(props);
+    // Do nothing.
+    // This method is required in order to use this view as a Touchable* child.
+    // See ensureComponentIsNative.js for more info
+  },
   render() {
-    return (<Text style={[this.styles.style, this.props.style]}>
+    return (<Text ref="textNode" style={[this.styles.style, this.props.style]}>
       {this.props.children}
     </Text>);
   },
@@ -92,7 +101,7 @@ CoreStyle.CustomPrevButton = React.createClass({
       <TouchableOpacity onPress={this.props.onPress}>
         <Image
           style={this.styles.button}
-          source={require('image!noteIcon')}
+          source={require('image!back')}
         />
       </TouchableOpacity>
     );
@@ -112,7 +121,7 @@ CoreStyle.CustomPlusButton = React.createClass({
       <TouchableOpacity onPress={this._onPress}>
         <Image
           style={this.styles.button}
-          source={require('image!noteIcon')}
+          source={require('image!add')}
         />
       </TouchableOpacity>
     );
