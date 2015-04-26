@@ -101,7 +101,7 @@ var AppNavigatorView = React.createClass({
       if (global.curHouse) {
         // route to default home
         initRoute = {
-          component: Views.Home,
+          component: Views.Setup,
           navBar: true,
           title: global.curHouse.get('name'),
           hidePrev: true,
