@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+var CoreStyle = require('./views/CoreStyle.js');
 var {
   AppRegistry,
   AsyncStorage,
@@ -8,8 +9,14 @@ var {
   Text,
   View,
   TouchableHighlight,
+  TouchableOpacity,
   Image
 } = React;
+var {
+  H1,
+  H2
+} = CoreStyle;
+
 var Parse = require('parse').Parse;
 Parse.initialize("Tr0epOMYD8xXYa22R3Uc8MhEGMYGLuoA0J05aYv3", "o3ki0HSrtxHj0Dcq4LmJAKrwTLo3BBgpX9awr1p8");
 
@@ -133,15 +140,13 @@ var Homie = React.createClass({
         <TouchableHighlight onPress={this.login}>
           <View style={styles.loginButton}>
             <Text style={styles.buttonText}>
-              Sign in with Facebook
+              login with Facebook
             </Text>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight>
-          <Text style={styles.result}>
-            {this.state.result}
-          </Text>
-        </TouchableHighlight>
+        <Text>
+            We will never post anything without your permission
+        </Text>
       </View>
     );
   },
@@ -162,7 +167,7 @@ var Homie = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
@@ -177,8 +182,9 @@ var styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 5,
-    backgroundColor: '#3b5998'
+    borderRadius: 25,
+    backgroundColor: '#3b5998',
+    marginBottom: 30
   },
   backgroundOverlay: {
     opacity: 0.85,
@@ -198,8 +204,9 @@ var styles = StyleSheet.create({
     right: 0,
   },
   buttonText: {
-    fontSize: 18,
-    fontFamily: 'Gill Sans',
+    fontSize: 32,
+    fontFamily: 'MetaPro',
+    fontWeight: 'bold',
     textAlign: 'center',
     margin: 10,
     color: '#ffffff',
