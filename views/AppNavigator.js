@@ -69,12 +69,14 @@ var AppNavigatorView = React.createClass({
 
     if (navBar) {
       navBar = <NavigationBar navigator={navigator}
-                              title={route.title}
+                              route={route}
                               backgroundColor={CoreStyle.colors.lightPurple}
                               hidePrev={route.hidePrev}
                               customPrev={route.customPrev}
                               customNext={route.customNext}
-                              onNext={route.onNext} />;
+                              onNext={route.onNext}
+                              title={route.title}
+                              titleColor={CoreStyle.colors.mediumBlue} />;
     }
 
     return (
@@ -120,6 +122,14 @@ var AppNavigatorView = React.createClass({
   }
 });
 
+var NavbarTitle = React.createClass({
+  render() {
+    return (<Text style={styles.titleStyle}>
+      {this.props.route.title}
+    </Text>);
+  }
+});
+
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -131,6 +141,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#545454'
   }
 });
+
 
 
 module.exports = AppNavigatorView;

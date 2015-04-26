@@ -7,11 +7,12 @@ var {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  TextInput,
   Image,
   ScrollView
 } = React;
 var {
+  Button,
+  TextInput,
   Text
 } = CoreStyle;
 
@@ -58,29 +59,24 @@ var AddNoteView = React.createClass({
 
   renderView() {
     return (
-      <ScrollView>
-        <View style={styles.contentContainer}>
+      <View style={{flex:1}}>
+        <Image source={require('image!housesBg')} style={styles.bgImage} />
+        <ScrollView style={styles.contentContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              style={styles.textInput}
               onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-              placeholder="title"
+              placeholder="note title"
             />
             <TextInput
-              style={styles.textInput}
+              style={styles.noteInput}
               onChange={(text) => this.setState({inputText: text.nativeEvent.text})}
               placeholder="type note here"
+              multiline={true}
             />
           </View>
-          <TouchableOpacity onPress={this.addNote}>
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonText}>
-                  Post Note
-                </Text>
-              </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          <Button onPress={this.addNote} text="post note" />
+        </ScrollView>
+      </View>
     );
   },
 
@@ -92,52 +88,27 @@ var AddNoteView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
+    paddingHorizontal: 25,
+    backgroundColor: 'transparent'
   },
   textInputContainer: {
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
+    marginTop: 30,
     borderRadius: 3,
     paddingVertical: 10,
+    backgroundColor: 'transparent'
   },
-  background: {
-    flex: 1
+  noteInput: {
+    marginTop: 10,
+    height: 150
   },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
-  },
-  houseList: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
-  textInput: {
-    height: 45,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+  bgImage: {
+    position: 'absolute',
+    bottom: 0,
+    left:0,
+    right:0,
+    height: 200
   }
 });
 

@@ -7,25 +7,30 @@ var {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  Image
+  Image,
+  ListView
 } = React;
 var {
+  H1,
+  H2,
   Text
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
 
 // App views
-var Views = {};
-Views.Home = require('./Home.js');
-Views.Loading = require('./Loading.js');
-Views.ShoppingItems = require('./ShoppingItems.js');
+var Views = {
+  Home: require('./Home.js'),
+  Loading: require('./Loading.js'),
+  ShoppingItems: require('./ShoppingItems.js')
+};
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
 var ShoppingView = React.createClass({
   getInitialState() {
     return {
+      dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
       lists: null,
       loading: true
     }
@@ -41,28 +46,24 @@ var ShoppingView = React.createClass({
     });
   },
 
-  renderList(shopList) {
-    var self = this;
-    var itemRel = shopList.relation('items');
+  componentDidMount() {
+    this.fetchData();
+  },
+
+  fetchList(list) {
+    var itemRel = list.relation('items');
     var query = itemRel.query();
     return query.find().then(function(items) {
       var numItems = items.length;
-      return (
-        <TouchableOpacity onPress={self.enterList.bind(null, shopList)}>
-          <View style={styles.list}>
-            <Text>
-              {shopList.get('title')}{'\n'}
-            </Text>
-            <Text>
-              {numItems} Items
-            </Text>
-          </View>
-        </TouchableOpacity>
-      )
+      return {
+        title: list.get('title'),
+        numItems: items.length,
+        parseObj: list
+      };
     });
   },
 
-  componentDidMount() {
+  fetchData() {
     var self = this;
     // query for shopping lists that are in current house
     var ShopList = Parse.Object.extend('ShoppingList');
@@ -72,9 +73,12 @@ var ShoppingView = React.createClass({
       success: function(lists) {
         // lists is a list of shopping lists in curHouse
         if (lists.length) {
-          var renderedLists = lists.map(self.renderList);
-          Promise.all(renderedLists).then(function(lists) {
-            self.setState({lists: lists, loading: false});
+          var fetchedLists = lists.map(self.fetchList);
+          Promise.all(fetchedLists).then(function(lists) {
+            self.setState({
+              dataSource: self.state.dataSource.cloneWithRows(lists),
+              loading: false
+              });
           });
         } else {
           // no notes found
@@ -87,85 +91,58 @@ var ShoppingView = React.createClass({
     });
   },
 
-  renderView() {
-    return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <View>
-            <View style={styles.houseList}>
-              {this.state.lists}
-            </View>
-          </View>
-        </View>
-      </View>);
+  renderShoppingListCell(list) {
+    return (<ListCell title={list.title}
+                      numItems={list.numItems}
+                      onPress={() => this.enterList(list.parseObj)} />);
   },
 
   render() {
-    if (this.state.loading) {
-      return (<View style={styles.background}>
-                <View style={styles.backgroundOverlay} />
-                <View style={styles.contentContainer}>
-                  <Text>
-                    LOADING
-                  </Text>
-                </View>
-              </View>);
-    }
-    return this.renderView();
+    var content = this.state.loading ?
+                    <Views.Loading /> :
+                    (<ListView
+                      style={styles.shoppingList}
+                      dataSource={this.state.dataSource}
+                      renderRow={this.renderShoppingListCell}/>);
+
+    return (
+      <View style={styles.contentContainer}>
+        {content}
+      </View>);
+  }
+});
+
+var ListCell = React.createClass({
+  render() {
+    return (
+      <TouchableOpacity activeOpacity={0.6} onPress={this.props.onPress}>
+        <View style={styles.listItem}>
+          <H1 style={{marginBottom: 5}}>{this.props.title}</H1>
+          <H2>{this.props.numItems} <H2 style={{fontFamily: 'MetaPro'}}>Items</H2></H2>
+        </View>
+      </TouchableOpacity>);
   }
 });
 
 var styles = StyleSheet.create({
   contentContainer: {
-    flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  buttonContents: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 3,
-    paddingVertical: 10,
-  },
-  background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
+    flex:1
   },
   list: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10
   },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
+  shoppingList: {
+    flex:1,
+    backgroundColor: CoreStyle.colors.background,
+    paddingTop: 1
   },
-  textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+  listItem: {
+    backgroundColor: CoreStyle.colors.paleBlue,
+    marginTop: 1,
+    marginBottom: 1,
+    padding: 25
   }
 });
 

@@ -5,12 +5,14 @@
 'use strict';
 
 var React = require('react-native');
+var CoreStyle = require('./CoreStyle.js');
 var {
   PixelRatio,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Image
 } = React;
 
 var NavigatorNavigationBarStyles = require('NavigatorNavigationBarStyles');
@@ -42,11 +44,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
   },
   navBarTitleText: {
-    color: cssVar('fbui-bluegray-60'),
-    fontWeight: '500',
     position: 'absolute',
     width: NavigatorNavigationBarStyles.General.ScreenWidth,
-    bottom: 15,
+    fontSize: 24,
+    fontFamily: 'Metabold-Roman',
+    bottom: 10
   },
   navBarLeftButton: {
     paddingLeft: 10,
@@ -56,6 +58,11 @@ var styles = StyleSheet.create({
   },
   navBarButtonText: {
     color: cssVar('fbui-accent-blue'),
+  },
+  navBarBack: {
+    width: 12,
+    height: 23,
+    bottom: 6
   }
 });
 
@@ -111,14 +118,11 @@ var NavigationBar = React.createClass({
     /*
      * Apply custom background styles to button
      */
-    var customStyle = backgroundColor ? { color: buttonsColor } : {};
 
     return (
       <TouchableOpacity onPress={onPrev || navigator.pop}>
         <View style={styles.navBarLeftButton}>
-          <Text style={[styles.navBarText, styles.navBarButtonText, customStyle]}>
-            {prevTitle || 'Back'}
-          </Text>
+          <Image style={styles.navBarBack} source={require('image!back')} />
         </View>
       </TouchableOpacity>
     );

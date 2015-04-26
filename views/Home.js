@@ -64,8 +64,12 @@ var HomeView = React.createClass({
   },
 
   render() {
-    return (<View style={styles.contentContainer}>
-          <TouchableOpacity onPress={this.notesPressed}>
+    return (
+      <View style={styles.contentContainer}>
+        <Image style={styles.fridgebg} source={require('image!fridgebg')} />
+
+        <View style={[styles.fridgeSections, styles.fridgeTop]}>
+          <TouchableOpacity style={styles.touchable} onPress={this.notesPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
@@ -81,7 +85,7 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.shoppingPressed}>
+          <TouchableOpacity style={styles.touchable} onPress={this.shoppingPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
@@ -89,6 +93,8 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
+        </View>
+        <View style={[styles.fridgeSections, styles.fridgeBottom]}>
           <TouchableOpacity onPress={this.choresPressed}>
             <Image
               style={styles.button}
@@ -120,7 +126,8 @@ var HomeView = React.createClass({
               source={require('image!messages')}
             />
           </TouchableOpacity>
-        </View>)
+        </View>
+      </View>)
   }
 });
 
@@ -128,12 +135,37 @@ var styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'stretch'
+  },
+  touchable: {
+    backgroundColor: 'transparent'
   },
   button: {
     flex: 1,
-    width: 40,
-    height: 40,
+    width: 75,
+    height: 75,
+    padding: 40,
+    margin: 10
+  },
+  fridgebg: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  fridgeSections: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 50,
+    backgroundColor: 'transparent'
+  },
+  fridgeTop: {
+    paddingTop: 20,
+    flex: 2
+  },
+  fridgeBottom: {
+    flex: 3
   }
 });
 

@@ -8,11 +8,13 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   Image,
-  TextInput,
   ListView,
   ScrollView
 } = React;
 var {
+  TextInput,
+  H1,
+  H2,
   Text
 } = CoreStyle;
 
@@ -31,7 +33,8 @@ var ShoppingItemsView = React.createClass({
       items: [],
       shopList: null,
       dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-      loading: true
+      loading: true,
+      newItemText: ''
     }
   },
 
@@ -78,7 +81,9 @@ var ShoppingItemsView = React.createClass({
     }
   },
 
-  addItem(item) {
+  addItem() {
+    var item = this.state.newItemText;
+
     var self = this;
     var ShopItem = Parse.Object.extend('ShoppingItem');
     var shopItem = new ShopItem();
@@ -101,7 +106,8 @@ var ShoppingItemsView = React.createClass({
       newItems.sort(self.compareItems);
       self.setState({
        items: newItems,
-       dataSource: self.state.dataSource.cloneWithRows(newItems)
+       dataSource: self.state.dataSource.cloneWithRows(newItems),
+       newItemText: ''
       });
     });
   },
@@ -151,36 +157,31 @@ var ShoppingItemsView = React.createClass({
   },
 
   renderItemCell(item) {
+    var icon = item.done ? require('image!checked') : require('image!unchecked');
+    var byText = item.done ? 'bought by' : 'requested by';
+    var bgColor = item.done ? CoreStyle.colors.palePurple : CoreStyle.colors.paleBlue;
+
+    var rowContents = (
+      <View style={[styles.listItem, {backgroundColor: bgColor}]}>
+        <View>
+          <H1 style={{marginBottom: 10}}>{item.name}</H1>
+          <H2>
+            <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {item.author} -
+            <H2 style={{fontFamily: 'MetaPro'}}> {moment(item.createdAt).fromNow()}</H2>
+          </H2>
+        </View>
+        <Image style={styles.icon} source={icon} resizeMode="contain" />
+      </View>);
+
+    var output;
+
     if (item.done) {
-      return (<View style={styles.doneItem} key={item.id}>
-                <View>
-                  <Text>
-                    {item.name}{'\n'}
-                  </Text>
-                  <Text>
-                    Completed By: {item.author}
-                    {moment(item.updatedAt).fromNow()}
-                  </Text>
-                </View>
-                <Image style={styles.icon}
-                       source={require('image!checked')} />
-              </View>);
+      return rowContents;
     } else {
-      return (<TouchableOpacity onPress={() => this.completeItem(item.id)} key={item.id}>
-                <View style={styles.activeItem}>
-                  <View>
-                    <Text>
-                      {item.name}{'\n'}
-                    </Text>
-                    <Text>
-                      Requested By: {item.author}
-                      {moment(item.createdAt).fromNow()}
-                    </Text>
-                  </View>
-                  <Image style={styles.icon}
-                         source={require('image!unchecked')} />
-                </View>
-              </TouchableOpacity>);
+      return (
+        <TouchableOpacity activeOpacity={0.6} onPress={() => this.completeItem(item.id)} key={item.id}>
+          {rowContents}
+        </TouchableOpacity>)
     }
   },
 
@@ -193,8 +194,10 @@ var ShoppingItemsView = React.createClass({
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
-              onSubmitEditing={(event) => this.addItem(event.nativeEvent.text)}
-              placeholder="add new item and press enter"
+              value={this.state.newItemText}
+              onChangeText={(text) => this.setState({newItemText: text})}
+              onSubmitEditing={this.addItem}
+              placeholder="Add new item and press enter..."
             />
           </View>
           <ListView
@@ -226,21 +229,14 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 5,
-    paddingVertical: 10,
-    height: 40
+    padding: 10
   },
-  textInput: {
-    height: 12,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    marginBottom: 2
   },
   itemList: {
     flex:1,
@@ -248,17 +244,8 @@ var styles = StyleSheet.create({
     paddingTop: 1
   },
   icon: {
-    flex: 1,
-    width: 20,
-    height: 20,
-  },
-  doneItem: {
-    backgroundColor:CoreStyle.colors.palePurple,
-    marginBottom: 2
-  },
-  activeItem: {
-    backgroundColor:CoreStyle.colors.paleBlue,
-    marginBottom: 2
+    width: 30,
+    height: 30
   }
 });
 

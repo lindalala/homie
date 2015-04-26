@@ -4,7 +4,10 @@ var {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
   Image,
+  TextInput,
   Navigator
 } = React;
 
@@ -77,40 +80,61 @@ CoreStyle.H2 = React.createClass({
   })
 });
 
-CoreStyle.Button = React.createClass({
+CoreStyle.TextInput = React.createClass({
   render() {
-    return (
-      <TouchableOpacity onPress={this._onPressButton}>
-        <Image
-          style={styles.button}
-          source={require('image!myButton')}
-        />
-      </TouchableOpacity>
-    );
+    return (<TextInput
+      style={[this.styles.textInput, this.props.style]}
+      onChange={this.props.onChange}
+      placeholder={this.props.placeholder}
+      onSubmitEditing={this.props.onSubmitEditing}
+      onChangeText={this.props.onChangeText}
+      value={this.props.value}
+    />);
   },
   styles: StyleSheet.create({
-    button: {
-      color: 'red'
+    textInput: {
+      fontFamily: 'MetaPro',
+      fontWeight: 'bold',
+      height: 60,
+      borderRadius: 30,
+      borderWidth: 2,
+      borderColor: CoreStyle.colors.mediumBlue,
+      flex: 1,
+      paddingHorizontal: 20,
+      fontSize: 20,
+      backgroundColor: 'white'
     }
   })
 });
 
-CoreStyle.CustomPrevButton = React.createClass({
+CoreStyle.Button = React.createClass({
+  getDefaultProps() {
+    return {
+      text: 'Button'
+    }
+  },
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
-        <Image
-          style={this.styles.button}
-          source={require('image!back')}
-        />
+      <TouchableOpacity activeOpacity={0.6} onPress={this.props.onPress}>
+        <View style={this.styles.button}>
+          <Text style={this.styles.text}>{this.props.text}</Text>
+        </View>
       </TouchableOpacity>
     );
   },
   styles: StyleSheet.create({
     button: {
-      flex: 1,
-      width: 38,
-      height: 38,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: CoreStyle.colors.mediumBlue,
+      height: 60,
+      borderRadius: 30
+    },
+    text: {
+      fontFamily: 'MetaBold-Roman',
+      fontWeight: 'bold',
+      fontSize: 30,
+      color: CoreStyle.colors.lightPurple
     }
   })
 });
@@ -130,17 +154,16 @@ CoreStyle.CustomPlusButton = React.createClass({
     this.props.navigator.push({
       navBar: true,
       title: this.props.title,
-      message: 'Swipe down to dismiss',
       sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
       component: this.props.plusView
     });
   },
   styles: StyleSheet.create({
     button: {
-      width: 24,
-      height: 24,
+      width: 20,
+      height: 20,
       right: 10,
-      bottom: 5
+      bottom: 8
     }
   })
 });
