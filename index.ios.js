@@ -125,6 +125,10 @@ var Homie = React.createClass({
   renderLogInView() {
     return (
       <View style={styles.container}>
+        <Image 
+          style={styles.logo}
+          source={require('image!homieLogo')} 
+        />
         <TouchableHighlight onPress={this.login}>
           <View style={styles.loginButton}>
             <Text style={styles.buttonText}>
@@ -132,8 +136,8 @@ var Homie = React.createClass({
             </Text>
           </View>
         </TouchableHighlight>
-        <Text>
-            We will never post anything without your permission
+        <Text style={styles.subheadingText}>
+            We will never post anything without permission
         </Text>
       </View>
     );
@@ -157,7 +161,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#333333',
   },
   background: {
     position: 'absolute',
@@ -170,9 +174,9 @@ var styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 15,
     paddingRight: 15,
-    borderRadius: 25,
-    backgroundColor: '#3b5998',
-    marginBottom: 30
+    borderRadius: 30,
+    backgroundColor: '#fff3b4',
+    justifyContent: 'center',
   },
   backgroundOverlay: {
     opacity: 0.85,
@@ -192,12 +196,31 @@ var styles = StyleSheet.create({
     right: 0,
   },
   buttonText: {
-    fontSize: 32,
+    fontSize: 28,
+    fontFamily: 'MetaBold-Roman',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 17,
+    marginRight: 20,
+    marginLeft: 20,
+    color: '#7a73d0',
+  },
+  subheadingText: {
+    fontSize: 12,
     fontFamily: 'MetaPro',
     fontWeight: 'bold',
     textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
+    marginTop: 20,
+    paddingBottom: 260,
+    color: '#d8e1f2',
+  },
+  logo: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 221.4,
+    height: 68.7,
+    marginBottom: 100,
   },
   contentContainer: {
     position: 'absolute',
