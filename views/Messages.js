@@ -1,7 +1,6 @@
 var React = require('react-native');
 var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
-var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var {
 	ActivityIndicatorIOS,
 	AsyncStorage,
@@ -111,7 +110,7 @@ var MsgView = React.createClass({
 			house.add(global.curHouse);
 			author.add(global.curUser);
 			msg.save();
-			
+
 			var newMessageInfo = {id: msg.id,
 								content: msg.get('content'),
 								author: global.curUser.get('name'),
@@ -135,7 +134,7 @@ var MsgView = React.createClass({
 	},
 
 	render() {
-		var content = this.state.loading ? 
+		var content = this.state.loading ?
 				<Views.Loading /> :
 				(<ListView
 					renderScrollView={
@@ -214,9 +213,3 @@ var styles = StyleSheet.create({
 });
 
 module.exports = MsgView;
-
-
-
-
-
-

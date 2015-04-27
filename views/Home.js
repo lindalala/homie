@@ -32,24 +32,15 @@ var Views = {
 
 var HomeView = React.createClass({
   notesPressed() {
-    this.props.navigator.push({
-      navBar: false,
-      component: Views.Notes
-    });
+    this.props.navigator.push({component: Views.Notes});
   },
 
   billsPressed() {
-    this.props.navigator.push({
-      navBar: false,
-      component: Views.Bills
-    });
+    this.props.navigator.push({component: Views.Bills});
   },
 
   shoppingPressed() {
-    this.props.navigator.push({
-      navBar: false,
-      component: Views.Shopping
-    });
+    this.props.navigator.push({component: Views.Shopping});
   },
 
   choresPressed() {
@@ -77,6 +68,10 @@ var HomeView = React.createClass({
       component: Views.Settings,
       hidePrev: false
     });
+  },
+
+  photosPressed() {
+    this.props.navigator.push({component: Views.Photos});
   },
 
   render() {
@@ -127,7 +122,7 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.photosPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
