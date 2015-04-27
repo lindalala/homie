@@ -104,7 +104,8 @@ var AppNavigatorView = React.createClass({
         // route to create/join house
         initRoute = {
           component: Views.Setup,
-          navBar: false,
+          navBar: true,
+          title: 'New Home'
         }
       }
 
