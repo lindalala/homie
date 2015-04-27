@@ -105,7 +105,7 @@ var SetupView = React.createClass({
         <ScrollView style={styles.contentContainer}>
           <TextInput
               style={styles.textInput}
-              onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
+              onChange={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home Name"
             />
             <Button onPress={this.createHouse} text="build home"/>
@@ -114,7 +114,7 @@ var SetupView = React.createClass({
           </View>
           <TextInput
               style={styles.textInput}
-              onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
+              onChange={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home ID"
             />
           <Button onPress={this.joinHouse} text="enter home" />

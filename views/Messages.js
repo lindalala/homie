@@ -206,9 +206,9 @@ var styles = StyleSheet.create({
     padding: 10
   },
   profPic: {
-  	flex: 0.2,
   	width: 50,
-  	height: 50
+  	height: 50,
+		borderRadius: 25
   }
 });
 

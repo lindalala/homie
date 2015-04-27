@@ -38,6 +38,14 @@ var ShoppingView = React.createClass({
     }
   },
 
+  componentDidMount() {
+    this.fetchData();
+  },
+
+  compareLists(list1, list2) {
+    return (list2.createdAt - list1.createdAt);
+  },
+
   enterList(shopList) {
     this.props.navigator.push({
       navBar: true,
@@ -48,10 +56,6 @@ var ShoppingView = React.createClass({
     });
   },
 
-  componentDidMount() {
-    this.fetchData();
-  },
-
   fetchList(list) {
     var itemRel = list.relation('items');
     var query = itemRel.query();
@@ -60,7 +64,8 @@ var ShoppingView = React.createClass({
       return {
         title: list.get('title'),
         numItems: items.length,
-        parseObj: list
+        parseObj: list,
+        createdAt: list.createdAt
       };
     });
   },
@@ -80,6 +85,7 @@ var ShoppingView = React.createClass({
         if (lists.length) {
           var fetchedLists = lists.map(self.fetchList);
           Promise.all(fetchedLists).then(function(lists) {
+            lists.sort(self.compareLists);
             self.setState({
               dataSource: self.state.dataSource.cloneWithRows(lists),
               loading: false
