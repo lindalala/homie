@@ -110,7 +110,7 @@ var HomesView = React.createClass({
         if (houses.length) {
           var fetchedHouses = houses.map(self.fetchHouse);
           Promise.all(fetchedHouses).then(function(houses) {
-            houses.sort(function(h1, h2) {return (h1.isCurHouse) ? 1 : -1;});
+            houses.sort(function(h1, h2) {return (h1.isCurHouse) ? -1 : 1;});
             self.setState({
               dataSource: self.state.dataSource.cloneWithRows(houses),
               loading: false

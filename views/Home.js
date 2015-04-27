@@ -31,12 +31,6 @@ var Views = {
 };
 
 var HomeView = React.createClass({
-  getInitialState() {
-    return {
-
-    }
-  },
-
   notesPressed() {
     this.props.navigator.push({
       navBar: true,
