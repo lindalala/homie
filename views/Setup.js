@@ -11,7 +11,10 @@ var {
   Image
 } = React;
 var {
-  Text
+  Text,
+  H2,
+  Button,
+  TextInput
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
@@ -98,39 +101,27 @@ var SetupView = React.createClass({
         <View style={styles.backgroundOverlay} />
         <View style={styles.contentContainer}>
           <View style={styles.buttonContents}>
-            <Text>
-              Create House
-            </Text>
             <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
-              placeholder="enter house name"
+              placeholder="Home Name"
             />
-          <TouchableOpacity onPress={this.createHouse}>
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonText}>
-                  Enter House
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <Button>
+                  build home
+            </Button>
           </View>
 
+          <H2>- or -</H2>
+
           <View style={styles.buttonContents}>
-            <Text>
-              Join House
-            </Text>
             <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
-              placeholder="enter house id"
+              placeholder="Home ID"
             />
-          <TouchableOpacity onPress={this.joinHouse}>
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonText}>
-                  Enter House
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <Button>
+              enter home
+            </Button>
           </View>
         </View>
       </View>);
@@ -146,7 +137,9 @@ var styles = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'stretch',
+    alignItems: 'center',
+    marginTop: 50,
+    marginBottom: 150
   },
   buttonContents: {
     flexDirection: 'column',
@@ -156,9 +149,10 @@ var styles = StyleSheet.create({
     marginHorizontal: 40,
     marginVertical: 40,
     padding: 5,
-    backgroundColor: '#EAEAEA',
+    backgroundColor: 'transparent',
     borderRadius: 3,
     paddingVertical: 10,
+    height: 150
   },
   background: {
     flex: 1
@@ -184,12 +178,8 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+    marginBottom: 5,
+    borderWidth: 1
   }
 });
 
