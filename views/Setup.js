@@ -8,7 +8,8 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ScrollView
 } = React;
 var {
   Text,
@@ -98,32 +99,24 @@ var SetupView = React.createClass({
   renderView() {
     return (
       <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <View style={styles.buttonContents}>
-            <TextInput
+      <Image source={require('image!housesBg')} style={styles.bgImage} />
+        <ScrollView style={styles.contentContainer}>
+          <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home Name"
             />
-            <Button onPress={this.createHouse}>
-                  build home
-            </Button>
-          </View>
-
+            <Button onPress={this.createHouse} text="build home"/>
+          <View style={styles.or}>
           <H2>- or -</H2>
-
-          <View style={styles.buttonContents}>
-            <TextInput
+          </View>
+          <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home ID"
             />
-            <Button onPress={this.joinHouse}>
-              enter home
-            </Button>
-          </View>
-        </View>
+          <Button onPress={this.joinHouse} text="enter home" />
+        </ScrollView>
       </View>);
   },
 
@@ -135,31 +128,12 @@ var SetupView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: 50,
-    marginBottom: 150
-  },
-  buttonContents: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: 'transparent',
-    borderRadius: 3,
-    paddingVertical: 10,
-    height: 150
+    marginTop: 100,
+    marginHorizontal: 45
   },
   background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
+    flex: 1,
+    backgroundColor: 'transparent',
   },
   buttonText: {
     fontSize: 20,
@@ -180,7 +154,18 @@ var styles = StyleSheet.create({
   textInput: {
     marginBottom: 5,
     borderWidth: 1
-  }
+  },
+  bgImage: {
+    position: 'absolute',
+    bottom: 0,
+    left:0,
+    right:0,
+    height: 200
+  },
+  or: {
+    alignItems: 'center',
+    paddingVertical: 30
+  },
 });
 
 module.exports = SetupView;

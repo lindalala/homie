@@ -117,7 +117,7 @@ CoreStyle.Button = React.createClass({
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={this.props.onPress}>
         <View style={this.styles.button}>
-          <Text style={this.styles.text}>{this.props.children}</Text>
+          <Text style={this.styles.text}>{this.props.text}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -129,7 +129,6 @@ CoreStyle.Button = React.createClass({
       backgroundColor: CoreStyle.colors.mediumBlue,
       height: 60,
       borderRadius: 30,
-      width: 280
     },
     text: {
       fontFamily: 'MetaBold-Roman',
