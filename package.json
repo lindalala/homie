@@ -11,7 +11,7 @@
     "parse": "*",
     "react-native": "^0.4.0",
     "react-native-navbar": "*",
-    "react-native-overlay": "^0.1.7",
-    "react-tween-state": "0.0.5"
+    "react-native-overlay": "lindalala/react-native-overlay",
+    "react-native-viewport": "lindalala/react-native-viewport"
   }
 }

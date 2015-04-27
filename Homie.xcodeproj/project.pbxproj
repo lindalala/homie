@@ -21,7 +21,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		AB5E52FC1AEC9FCB00F7B069 /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E52FA1AEC9C4500F7B069 /* libRNOverlay.a */; };
+		AB23BA941AEED75300C8302A /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E52FA1AEC9C4500F7B069 /* libRNOverlay.a */; };
+		AB23BA9B1AEED81D00C8302A /* libViewport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB23BA9A1AEED81400C8302A /* libViewport.a */; };
 		ABA0F7D41AD4B27E00BA01BA /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D01AD4B27E00BA01BA /* Bolts.framework */; };
 		ABA0F7D51AD4B27E00BA01BA /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */; };
 		ABA0F7D61AD4B27E00BA01BA /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D21AD4B27E00BA01BA /* FBSDKLoginKit.framework */; };
@@ -101,6 +102,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		AB23BA991AEED81400C8302A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB23BA951AEED81400C8302A /* Viewport.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = Viewport;
+		};
 		AB5E52F91AEC9C4500F7B069 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */;
@@ -128,6 +136,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iOS/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		AB23BA951AEED81400C8302A /* Viewport.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Viewport.xcodeproj; path = "node_modules/react-native-viewport/Viewport.xcodeproj"; sourceTree = "<group>"; };
 		AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNOverlay.xcodeproj; path = "node_modules/react-native-overlay/RNOverlay.xcodeproj"; sourceTree = "<group>"; };
 		ABA0F7D01AD4B27E00BA01BA /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = iOS/Frameworks/Bolts.framework; sourceTree = "<group>"; };
 		ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = iOS/Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -150,7 +159,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB5E52FC1AEC9FCB00F7B069 /* libRNOverlay.a in Frameworks */,
+				AB23BA9B1AEED81D00C8302A /* libViewport.a in Frameworks */,
+				AB23BA941AEED75300C8302A /* libRNOverlay.a in Frameworks */,
 				00481BEA1AC0C89D00671115 /* libicucore.dylib in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				ABA0F7D71AD4B27E00BA01BA /* FBSDKShareKit.framework in Frameworks */,
@@ -253,6 +263,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				AB23BA951AEED81400C8302A /* Viewport.xcodeproj */,
 				AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
@@ -291,6 +302,14 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Homie.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB23BA961AEED81400C8302A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB23BA9A1AEED81400C8302A /* libViewport.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -423,6 +442,10 @@
 					ProductGroup = AB5E52F61AEC9C4500F7B069 /* Products */;
 					ProjectRef = AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */;
 				},
+				{
+					ProductGroup = AB23BA961AEED81400C8302A /* Products */;
+					ProjectRef = AB23BA951AEED81400C8302A /* Viewport.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -493,6 +516,13 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AB23BA9A1AEED81400C8302A /* libViewport.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libViewport.a;
+			remoteRef = AB23BA991AEED81400C8302A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		AB5E52FA1AEC9C4500F7B069 /* libRNOverlay.a */ = {

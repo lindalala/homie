@@ -79,6 +79,20 @@ CoreStyle.H2 = React.createClass({
     },
   })
 });
+CoreStyle.H3 = React.createClass({
+  render() {
+    return (<CoreStyle.Text style={[this.styles.style, this.props.style]}>
+      {this.props.children}
+    </CoreStyle.Text>);
+  },
+  styles: StyleSheet.create({
+    style: {
+      color: CoreStyle.colors.mediumBlue,
+      fontSize: 18,
+      /* also there's MetaBook-Roman and MetaBold-Roman (this one's boldest)*/
+    },
+  })
+});
 
 CoreStyle.TextInput = React.createClass({
   render() {

@@ -11,14 +11,15 @@ var {
   Image,
   DatePickerIOS,
   PickerIOS,
-  ScrollView
+  ScrollView,
+  TextInput
 } = React;
 PickerItemIOS = PickerIOS.Item;
 var {
   H1,
+  H3,
   Button,
-  Text,
-  TextInput
+  Text
 } = CoreStyle;
 var Overlay = require('react-native-overlay');
 var Parse = require('parse').Parse;
@@ -166,11 +167,12 @@ var AddBillView = React.createClass({
           <View style={styles.modal}>
             <H1>Due date</H1>
             <DatePickerIOS
+              style={styles.datePicker}
               date={this.state.dueDate}
               mode="date"
               onDateChange={this.dueDateChanged}
             />
-          <TouchableOpacity onPress={this.closeModal}>
+            <TouchableOpacity onPress={this.closeModal}>
               <View>
                 <Text style={styles.buttonText}>
                   Choose
@@ -223,15 +225,18 @@ var AddBillView = React.createClass({
     var self = this;
     var dateModal = this.renderDateModal();
     var hmModal = this.renderHousemateModal();
+
     var hmCharges = this.state.hmCharges.map(function(charge, idx) {
       return (
-        <View style={styles.chargeAmt}>
-          <TextInput
-            style={styles.textInput}
-            keyboardType={'decimal-pad'}
-            onEndEditing={(event) => self.updateAmount(event.nativeEvent.text, idx)}
-            placeholder={'$' + charge.amount}
-          />
+        <View style={[styles.pillbox, styles.hmChargeContainer]}>
+          <View style={{justifyContent: 'center'}}>
+            <TextInput
+              style={styles.dollarInput}
+              keyboardType={'decimal-pad'}
+              onEndEditing={(event) => self.updateAmount(event.nativeEvent.text, idx)}
+              placeholder={'$' + charge.amount}
+            />
+          </View>
           <View style={styles.chargeName}>
             <Text style={styles.buttonText}>
               {charge.target}
@@ -240,32 +245,38 @@ var AddBillView = React.createClass({
         </View>
       )
     });
+
+    if (this.state.hmCharges.length === 0) {
+      hmCharges = <React.Text>No housemates added</React.Text>;
+    }
+
     return (
       <ScrollView style={styles.contentContainer}>
-        {dateModal}
         <View style={styles.buttonContents}>
-          <TextInput
+          <CoreStyle.TextInput
             style={styles.textInput}
             onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-            placeholder="bill name"
+            placeholder="Bill Name"
           />
           <TouchableOpacity onPress={this.openDateModal}>
-            <View>
-              <Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</Text>
+            <View style={styles.pillbox}>
+              <H1 style={styles.fieldTitle}>Due Date</H1>
+              <React.Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</React.Text>
             </View>
           </TouchableOpacity>
-          <Text>Charge Housemates</Text>
+          <H3 style={styles.chargeTitle}>Charge Housemates</H3>
           {hmCharges}
-          {hmModal}
           <TouchableOpacity onPress={this.openHousemateModal}>
               <View>
-                <Text style={styles.buttonText}>
-                  + add another housemate
+                <Text style={styles.addHmButton}>
+                  + Add a housemate
                 </Text>
               </View>
           </TouchableOpacity>
         </View>
         <Button onPress={this.addBill} text="create bill" />
+        {dateModal}
+        {hmModal}
       </ScrollView>);
   }
 });
@@ -273,13 +284,12 @@ var AddBillView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
+    paddingTop: 25
   },
   buttonContents: {
     flexDirection: 'column',
     flex: 1,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
     paddingVertical: 10,
   },
   houseList: {
@@ -294,22 +304,57 @@ var styles = StyleSheet.create({
     marginTop: 15,
     alignSelf: 'center',
   },
-  textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+  chargeTitle: {
+    alignSelf: 'center',
+    marginTop: 40,
+    marginBottom: 15
+  },
+  dollarInput: {
+    height: 40,
+    width: 100
+  },
+  chargeName: {
+    borderLeftWidth: 2,
+    borderLeftColor: CoreStyle.colors.mediumBlue,
+    width: 150,
+    justifyContent: 'center',
+    paddingLeft: 20
+  },
+  hmChargeContainer: {
+    alignItems: 'stretch'
+  },
+  addHmButton: {
+    alignSelf: 'center',
+    marginTop: 15
+  },
+  pillbox: {
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: CoreStyle.colors.mediumBlue,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5
+  },
+  fieldTitle: {
+    fontSize: 18,
+    marginRight: 10
+  },
+  datePicker: {
+    flex: 1
   },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(20,20,20,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 5
+    padding: 20
   },
   modal: {
+    margin: 20,
     paddingTop: 20,
     paddingBottom: 20,
     backgroundColor: 'white',
@@ -319,14 +364,6 @@ var styles = StyleSheet.create({
   hmPicker: {
     flex: 1,
     width: 300
-  },
-  chargeAmt: {
-    width: 50,
-    height: 50
-  },
-  chargeName: {
-    width: 150,
-    height: 40
   }
 });
 
