@@ -8,7 +8,6 @@ var {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  TextInput,
   Image,
   DatePickerIOS,
   PickerIOS,
@@ -17,7 +16,8 @@ var {
 PickerItemIOS = PickerIOS.Item;
 var {
   H1,
-  Text
+  Text,
+  TextInput
 } = CoreStyle;
 var Overlay = require('react-native-overlay');
 var Parse = require('parse').Parse;
@@ -116,7 +116,6 @@ var AddBillView = React.createClass({
             items.add(billItem);
             bill.save();
             var ower = billItem.relation('ower');
-            console.log(charge.id);
             var query = new Parse.Query(Parse.User);
             // query for user with matching ID
             query.equalTo("objectId", charge.id);
