@@ -106,7 +106,7 @@ var SetupView = React.createClass({
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home Name"
             />
-            <Button>
+            <Button onPress={this.createHouse}>
                   build home
             </Button>
           </View>
@@ -119,7 +119,7 @@ var SetupView = React.createClass({
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
               placeholder="Home ID"
             />
-            <Button>
+            <Button onPress={this.joinHouse}>
               enter home
             </Button>
           </View>
