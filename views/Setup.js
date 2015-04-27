@@ -9,7 +9,8 @@ var {
   TouchableOpacity,
   TextInput,
   Image,
-  ScrollView
+  ScrollView,
+  PixelRatio
 } = React;
 var {
   Text,
@@ -21,6 +22,8 @@ var {
 var Parse = require('parse').Parse;
 
 var STATUS = {ENTER: 0, SETUP: 1};
+
+var NavigatorNavigationBarStyles = require('NavigatorNavigationBarStyles');
 
 var SetupView = React.createClass({
   getInitialState() {
@@ -99,6 +102,9 @@ var SetupView = React.createClass({
   renderView() {
     return (
       <View style={styles.background}>
+      <View style={styles.topBarContainer}>
+        <Text style={styles.topBarText}>New Home</Text>
+      </View>
       <Image source={require('image!housesBg')} style={styles.bgImage} />
         <ScrollView style={styles.contentContainer}>
           <TextInput
@@ -128,7 +134,7 @@ var SetupView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    marginTop: 100,
+    paddingTop: 60,
     marginHorizontal: 45
   },
   background: {
@@ -143,28 +149,41 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
   textInput: {
     marginBottom: 5,
-    borderWidth: 1
   },
   bgImage: {
     position: 'absolute',
     bottom: 0,
     left:0,
     right:0,
-    height: 200
+    height: 200,
   },
   or: {
     alignItems: 'center',
     paddingVertical: 30
+  },
+  topBarContainer: {
+    height: NavigatorNavigationBarStyles.General.TotalNavHeight,
+    width: NavigatorNavigationBarStyles.General.ScreenWidth,
+    backgroundColor: CoreStyle.colors.lightPurple,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    paddingBottom: 5,
+    borderBottomColor: 'rgba(0, 0, 0, 0.3)',
+    borderBottomWidth: 1 / PixelRatio.get(),
+    justifyContent: 'space-between',
+  },
+  topBarText: {
+    marginVertical: 10,
+    flex: 2,
+    color: CoreStyle.colors.paleBlue,
+    textAlign: 'center',
+    position: 'absolute',
+    width: NavigatorNavigationBarStyles.General.ScreenWidth,
+    fontSize: 24,
+    fontFamily: 'Metabold-Roman',
+    bottom: 10
   },
 });
 
