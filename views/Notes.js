@@ -1,6 +1,7 @@
 var React = require('react-native');
 var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
+var NavigationBar = require('./NavigationBar.js');
 var {
   ActivityIndicatorIOS,
   AsyncStorage,
@@ -22,7 +23,7 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {
-  Home: require('./Home.js'),
+  AddNote: require('./AddNote.js'),
   Loading: require('./Loading.js')
 };
 
@@ -110,6 +111,11 @@ var NotesView = React.createClass({
 
     return (
       <View style={styles.contentContainer}>
+        <NavigationBar navigator={this.props.navigator}
+                                backgroundColor={CoreStyle.colors.lightPurple}
+                                customNext={<CustomPlusButton plusView={Views.AddNote} title={'Add Note'} callPrevView={this.fetchData} />}
+                                title="Notes"
+                                titleColor={CoreStyle.colors.mediumBlue} />
         {content}
       </View>);
   }

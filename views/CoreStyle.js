@@ -169,7 +169,8 @@ CoreStyle.CustomPlusButton = React.createClass({
       navBar: true,
       title: this.props.title,
       sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
-      component: this.props.plusView
+      component: this.props.plusView,
+      callPrevView: this.props.callPrevView
     });
   },
   styles: StyleSheet.create({

@@ -13,16 +13,18 @@ var {
 var {
   H1,
   H2,
-  Text
+  Text,
+  CustomPlusButton
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var NavigationBar = require('./NavigationBar.js');
 
 // App views
 var Views = {
-  Home: require('./Home.js'),
   Loading: require('./Loading.js'),
-  ShoppingItems: require('./ShoppingItems.js')
+  ShoppingItems: require('./ShoppingItems.js'),
+  AddShopping: require('./AddShopping.js')
 };
 
 var STATUS = {ENTER: 0, SETUP: 1};
@@ -64,6 +66,9 @@ var ShoppingView = React.createClass({
   },
 
   fetchData() {
+    // Set loading back to true, in case it is a refresh call
+    this.setState({loading: true});
+
     var self = this;
     // query for shopping lists that are in current house
     var ShopList = Parse.Object.extend('ShoppingList');
@@ -107,6 +112,11 @@ var ShoppingView = React.createClass({
 
     return (
       <View style={styles.contentContainer}>
+        <NavigationBar navigator={this.props.navigator}
+                                backgroundColor={CoreStyle.colors.lightPurple}
+                                customNext={<CustomPlusButton plusView={Views.AddShopping} title={'Add Shopping List'} callPrevView={this.fetchData} />}
+                                title="Shopping Lists"
+                                titleColor={CoreStyle.colors.mediumBlue} />
         {content}
       </View>);
   }

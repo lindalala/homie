@@ -135,6 +135,7 @@ var AddBillView = React.createClass({
     }, function(error) {
       alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
+      self.props.route.callPrevView();
       self.props.navigator.pop();
     });
   },

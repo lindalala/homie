@@ -22,7 +22,6 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {};
-Views.Home = require('./Home.js');
 Views.Loading = require('./Loading.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};

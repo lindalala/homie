@@ -20,44 +20,35 @@ var Parse = require('parse').Parse;
 // App views
 var Views = {
   Notes: require('./Notes.js'),
-  AddNote: require('./AddNote.js'),
   Bills: require('./Bills.js'),
   AddBill: require('./AddBill.js'),
   Shopping: require('./Shopping.js'),
   AddShopping: require('./AddShopping.js'),
   Chores: require('./Chores.js'),
   Messages: require('./Messages.js'),
-  Settings: require('./Settings.js')
+  Settings: require('./Settings.js'),
+  Photos: require('./Photos.js')
 };
 
 var HomeView = React.createClass({
   notesPressed() {
     this.props.navigator.push({
-      navBar: true,
-      title: 'Notes',
-      component: Views.Notes,
-      hidePrev: false,
-      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'} />,
+      navBar: false,
+      component: Views.Notes
     });
   },
 
   billsPressed() {
     this.props.navigator.push({
-      navBar: true,
-      title: 'Bills',
-      component: Views.Bills,
-      hidePrev: false,
-      customNext: <CustomPlusButton plusView={Views.AddBill} title={'Add Bill'}/>,
+      navBar: false,
+      component: Views.Bills
     });
   },
 
   shoppingPressed() {
     this.props.navigator.push({
-      navBar: true,
-      title: 'Shopping Lists',
-      component: Views.Shopping,
-      hidePrev: false,
-      customNext: <CustomPlusButton plusView={Views.AddShopping} title={'Add Shopping List'}/>,
+      navBar: false,
+      component: Views.Shopping
     });
   },
 

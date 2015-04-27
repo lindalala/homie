@@ -14,13 +14,16 @@ var {
 var {
   H1,
   H2,
-  Text
+  Text,
+  CustomPlusButton
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var NavigationBar = require('./NavigationBar.js');
 
 // App views
 var Views = {
+  AddBill: require('./AddBill.js'),
   BillItems: require('./BillItems.js'),
   Loading: require('./Loading.js')
 };
@@ -48,6 +51,9 @@ var BillsView = React.createClass({
   },
 
   fetchData() {
+    // Set loading back to true, in case it is a refresh call
+    this.setState({loading: true});
+
     var self = this;
     // query for bills that are in current house
     var Bill = Parse.Object.extend('Bill');
@@ -100,6 +106,11 @@ var BillsView = React.createClass({
 
     return (
       <View style={styles.contentContainer}>
+        <NavigationBar navigator={this.props.navigator}
+                                backgroundColor={CoreStyle.colors.lightPurple}
+                                customNext={<CustomPlusButton plusView={Views.AddBill} title={'Add New Bill'} callPrevView={this.fetchData} />}
+                                title="Bills"
+                                titleColor={CoreStyle.colors.mediumBlue} />
         {content}
       </View>);
   }

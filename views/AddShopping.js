@@ -37,6 +37,7 @@ var AddShoppingView = React.createClass({
       house.add(global.curHouse);
       shopList.save();
     }).then(function() {
+      self.props.route.callPrevView();
       self.props.navigator.pop();
     });
   },
