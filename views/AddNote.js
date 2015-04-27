@@ -53,6 +53,7 @@ var AddNoteView = React.createClass({
       author.add(global.curUser);
       note.save();
     }).then(function() {
+      if (self.props.refreshParent) self.props.refreshParent();
       self.props.navigator.pop();
     });
   },

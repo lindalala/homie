@@ -10,7 +10,8 @@ var {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  Image
+  Image,
+  StatusBarIOS
 } = React;
 var {
   H1,
@@ -44,6 +45,9 @@ var Homie = React.createClass({
   },
 
   componentDidMount() {
+    // Status bar color
+    StatusBarIOS.setStyle(StatusBarIOS.Style.lightContent);
+
     var self = this;
     AsyncStorage.getItem('@Homie:user', (error, value) => {
       if (value !== null) {
@@ -125,9 +129,9 @@ var Homie = React.createClass({
   renderLogInView() {
     return (
       <View style={styles.container}>
-        <Image 
+        <Image
           style={styles.logo}
-          source={require('image!homieLogo')} 
+          source={require('image!homieLogo')}
         />
         <TouchableHighlight onPress={this.login}>
           <View style={styles.loginButton}>

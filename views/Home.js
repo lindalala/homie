@@ -18,13 +18,15 @@ var {
 var Parse = require('parse').Parse;
 
 // App views
-var Views = {};
-Views.Notes = require('./Notes.js');
-Views.AddNote = require('./AddNote.js');
-Views.Bills = require('./Bills.js');
-Views.AddBill = require('./AddBill.js');
-Views.Shopping = require('./Shopping.js');
-Views.AddShopping = require('./AddShopping.js');
+var Views = {
+  Notes: require('./Notes.js'),
+  AddNote: require('./AddNote.js'),
+  Bills: require('./Bills.js'),
+  AddBill: require('./AddBill.js'),
+  Shopping: require('./Shopping.js'),
+  AddShopping: require('./AddShopping.js'),
+  Chores: require('./Chores.js')
+};
 
 var HomeView = React.createClass({
   getInitialState() {
@@ -39,7 +41,7 @@ var HomeView = React.createClass({
       title: 'Notes',
       component: Views.Notes,
       hidePrev: false,
-      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'}/>,
+      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'} />,
     });
   },
 
@@ -63,6 +65,15 @@ var HomeView = React.createClass({
     });
   },
 
+  choresPressed() {
+    this.props.navigator.push({
+      navBar: true,
+      title: 'Chores',
+      component: Views.Chores,
+      hidePrev: false
+    });
+  },
+
   render() {
     return (
       <View style={styles.contentContainer}>
@@ -81,7 +92,7 @@ var HomeView = React.createClass({
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
-              source={require('image!notes')}
+              source={require('image!money')}
             />
           </TouchableOpacity>
 
