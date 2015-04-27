@@ -1,6 +1,7 @@
 var React = require('react-native');
 var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
+var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var {
 	ActivityIndicatorIOS,
 	AsyncStorage,
@@ -9,17 +10,18 @@ var {
 	TouchableHighlight,
 	TouchableOpacity,
 	Image,
-	ListView
+	ListView,
+	ScrollView
 } = React;
 var {
 	H1,
 	H2,
-	Text
+	Text,
+	TextInput,
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
 
-// App views
 var Views = {
 	Home: require('./Home.js'),
 	Loading: require('./Loading.js')
@@ -30,8 +32,10 @@ var STATUS = {ENTER: 0, SETUP: 1};
 var MsgView = React.createClass({
 	getInitialState() {
 		return {
+			messages: [],
+			inputText: '',
 			dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
-			loading: true
+			loading: true,
 		}
 	},
 
@@ -47,6 +51,7 @@ var MsgView = React.createClass({
 			return {
 				content: msg.get('content'),
 				author: author.get('name'),
+				picture: msg.get('picture'),
 				createdAt: msg.createdAt
 			}
 		});
@@ -68,14 +73,15 @@ var MsgView = React.createClass({
 				if (msgs.length) {
 					var fetchedMsgs = msgs.map(self.fetchMsg);
 					Promise.all(fetchedMsgs).then(function(msgs) {
+						msgs.sort(self.compareMessages);
 						self.setState({
 							dataSource: self.state.dataSource.cloneWithRows(msgs),
-							loading: false
+							loading: false,
+							messages: msgs
 						});
 					});
 				} else {
-					// no messages
-					self.setState({msgs: [], loading: false});
+					self.setState({messages: [], loading: false});
 				}
 			},
 			error: function(error) {
@@ -84,9 +90,47 @@ var MsgView = React.createClass({
 		});
 	},
 
+	compareMessages(msg1, msg2) {
+		return (msg1.createdAt - msg2.createdAt);
+	},
+
+	addMsg() {
+		var Msg = Parse.Object.extend('Message');
+		var msg = new Msg();
+
+		msg.set('content', this.state.inputText);
+
+		var self = this;
+		msg.save().then(function(msg) {
+		}, function(error) {
+			alert('Failed to create new object, with error code: ' + error.message);
+		}).then(function() {
+			var house = msg.relation('house');
+			var author = msg.relation('author');
+			msg.set('picture', global.curUser.get('picture'));
+			house.add(global.curHouse);
+			author.add(global.curUser);
+			msg.save();
+			
+			var newMessageInfo = {id: msg.id,
+								content: msg.get('content'),
+								author: global.curUser.get('name'),
+								picture: global.curUser.get('picture'),
+								createdAt: msg.createdAt };
+			var newMessages = React.addons.update(self.state.messages, {$push: [newMessageInfo]});
+			newMessages.sort(self.compareMessages);
+			self.setState({
+				messages: newMessages,
+				dataSource: self.state.dataSource.cloneWithRows(newMessages),
+				inputText: ''
+			});
+		});
+	},
+
 	renderMsgCell(msg) {
 		return (<MsgCell content={msg.content}
 						 author={msg.author}
+						 picture={msg.picture}
 						 createdAt={msg.createdAt} />);
 	},
 
@@ -94,46 +138,78 @@ var MsgView = React.createClass({
 		var content = this.state.loading ? 
 				<Views.Loading /> :
 				(<ListView
+					renderScrollView={
+        				(props) => <InvertibleScrollView {...props} inverted />
+        			}
 					style={styles.msgsList}
 					dataSource={this.state.dataSource}
-					renderRow={this.renderMsgCell}/>);
+					renderRow={this.renderMsgCell} />);
 		return (
-			<View style={styles.contentContainer}>
-				{content}
-			</View>);
+			<View style={{flex:1}}>
+				<View style={styles.contentContainer}>
+					{content}
+					<View style={{height: 80, marginTop: 10, borderRadius: 3, paddingVertical: 10}}>
+						<TextInput
+							value={this.state.inputText}
+							onChangeText={(text) => this.setState({inputText: text})}
+							onSubmitEditing={this.addMsg}
+							placeholder="enter message"
+						/>
+					</View>
+				</View>
+			</View>
+		);
 
 	}
 });
 
 
 var MsgCell = React.createClass({
+
 	render() {
 		return (
-			<View style={styles.note}>
-		        //<H1 style={{marginBottom: 5}}>{this.props.title}</H1>
-		        <H2><H2 style={{fontFamily: 'MetaPro'}}>by</H2> {this.props.author}</H2>
-		        <Text style={{marginTop: 15, marginBottom: 15}}>{this.props.content}</Text>
-		        <Text style={{color: CoreStyle.colors.lightPurple}}>
-		          {moment(this.props.createdAt).fromNow()}
-		        </Text>
-		      </View>);
+			<View style={styles.message}>
+				<Image style={styles.profPic} source={{uri: this.props.picture}} resizeMode="contain" />
+				<View style={{paddingLeft: 10, flex: 0.75}}>
+			        <H2 style={{fontFamily: 'MetaPro', fontSize: 10}}>{this.props.author}</H2>
+			        <Text style={{marginTop: 2, marginBottom: 6, fontSize: 16}}>{this.props.content}</Text>
+			        <H2 style={{fontFamily: 'MetaPro', fontSize: 8}}>
+			          {moment(this.props.createdAt).format('MMMM Do, h:mm a')}
+			        </H2>
+			    </View>
+		     </View>);
   }
 });
 
 var styles = StyleSheet.create({
   contentContainer: {
-    flex:1
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'transparent',
+    marginTop: 10
   },
-  notesList: {
+  textInputContainer: {
+  	height: 60,
+  	paddingHorizontal: 25,
+  	backgroundColor: 'transparent',
+  },
+  msgsList: {
     flex:1,
     backgroundColor: CoreStyle.colors.background,
     paddingTop: 1
   },
-  note: {
-    backgroundColor: CoreStyle.colors.paleBlue,
+  message: {
+  	flexDirection: 'row',
+  	alignItems: 'center',
+  	justifyContent: 'flex-start',
     marginTop: 1,
-    marginBottom: 1,
-    padding: 25
+    marginBottom: 2,
+    padding: 10
+  },
+  profPic: {
+  	flex: 0.2,
+  	width: 50,
+  	height: 50
   }
 });
 
