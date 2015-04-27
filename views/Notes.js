@@ -46,11 +46,13 @@ var NotesView = React.createClass({
     var query = authorRelation.query();
     return query.find().then(function(list) {
       var author = list[0];
-      return {
-        title: note.get('title'),
-        content: note.get('content'),
-        author: author.get('name'),
-        createdAt: note.createdAt
+      if (author) {
+        return {
+          title: note.get('title'),
+          content: note.get('content'),
+          author: author.get('name'),
+          createdAt: note.createdAt
+        };
       }
     });
   },
