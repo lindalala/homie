@@ -135,7 +135,10 @@ var HomesView = React.createClass({
       <TouchableOpacity onPress={() => this.enterHouse(house)}>
         <View style={styles.house}>
           <H1 style={{marginBottom: 5}}>{house.title}</H1>
-          <H2> {homies} </H2>
+            <View style={styles.namesRow}>
+              <Image style={styles.icon} source={require('image!group')} resizeMode="contain" />
+              <H2 style={{paddingLeft: 5}}> {homies} </H2>
+            </View>
         </View>
       </TouchableOpacity>
     );
@@ -171,6 +174,13 @@ var styles = StyleSheet.create({
     marginTop: 1,
     marginBottom: 1,
     padding: 25
+  },
+  namesRow: {
+    flexDirection: 'row'
+  },
+  icon: {
+    height: 15,
+    width: 15
   }
 });
 

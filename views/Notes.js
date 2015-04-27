@@ -39,7 +39,6 @@ var NotesView = React.createClass({
 
   componentDidMount() {
     this.fetchData();
-
   },
 
   fetchNote(note) {
@@ -54,10 +53,6 @@ var NotesView = React.createClass({
         createdAt: note.createdAt
       }
     });
-  },
-
-  onWillFocus() {
-    alert('Will focus on Note');
   },
 
   fetchData() {
@@ -75,6 +70,7 @@ var NotesView = React.createClass({
         if (notes.length) {
           var fetchedNotes = notes.map(self.fetchNote);
           Promise.all(fetchedNotes).then(function(notes) {
+            notes.sort(self.compareNotes);
             self.setState({
               dataSource: self.state.dataSource.cloneWithRows(notes),
               loading: false
@@ -89,6 +85,10 @@ var NotesView = React.createClass({
         alert("Error: " + error.code + " " + error.message);
       }
     });
+  },
+
+  compareNotes(note1, note2) {
+    return (note2.createdAt - note1.createdAt);
   },
 
   renderNoteCell(note) {
@@ -120,9 +120,12 @@ var NoteCell = React.createClass({
         <H1 style={{marginBottom: 5}}>{this.props.title}</H1>
         <H2><H2 style={{fontFamily: 'MetaPro'}}>by</H2> {this.props.author}</H2>
         <Text style={{marginTop: 15, marginBottom: 15}}>{this.props.content}</Text>
-        <Text style={{color: CoreStyle.colors.lightPurple}}>
-          {moment(this.props.createdAt).fromNow()}
-        </Text>
+        <View style={styles.bottomRow}>
+          <Image style={styles.icon} source={require('image!time')} resizeMode="contain" />
+          <Text style={{color: CoreStyle.colors.lightPurple, marginLeft: 10}}>
+            {moment(this.props.createdAt).fromNow()}
+          </Text>
+        </View>
       </View>);
   }
 });
@@ -141,6 +144,13 @@ var styles = StyleSheet.create({
     marginTop: 1,
     marginBottom: 1,
     padding: 25
+  },
+  bottomRow: {
+    flexDirection: 'row',
+  },
+  icon: {
+    height: 15,
+    width: 15
   }
 });
 

@@ -64,7 +64,7 @@ var HomiesView = React.createClass({
       <View style={[styles.listItem, {backgroundColor: bgColor}]}>
         <Image style={styles.icon} source={{uri: hm.picture}} resizeMode="contain" />
         <View>
-          <H1 style={{marginBottom: 10}}>{hm.name}</H1>
+          <H1 style={{marginBottom: 10, marginLeft: 10}}>{hm.name}</H1>
         </View>
       </View>);
   },
