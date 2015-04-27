@@ -80,7 +80,7 @@ var HomeView = React.createClass({
         <Image style={styles.fridgebg} source={require('image!fridgebg')} />
 
         <View style={[styles.fridgeSections, styles.fridgeTop]}>
-          <TouchableOpacity style={styles.touchable} onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.notesPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
@@ -96,9 +96,9 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.touchable} onPress={this.shoppingPressed}>
+          <TouchableOpacity onPress={this.shoppingPressed}>
             <Image
-              style={styles.button}
+              style={[styles.button, {margin: 0}]}
               resizeMode={Image.resizeMode.contain}
               source={require('image!shopping')}
             />
@@ -148,15 +148,10 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch'
   },
-  touchable: {
-    backgroundColor: 'transparent'
-  },
   button: {
-    flex: 1,
     width: 75,
     height: 75,
-    padding: 40,
-    margin: 10
+    margin: 15
   },
   fridgebg: {
     position: 'absolute',
@@ -168,11 +163,12 @@ var styles = StyleSheet.create({
   fridgeSections: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
     padding: 50,
     backgroundColor: 'transparent'
   },
   fridgeTop: {
-    paddingTop: 20,
+    paddingTop: 15,
     flex: 2
   },
   fridgeBottom: {
