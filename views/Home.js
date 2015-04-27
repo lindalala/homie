@@ -39,7 +39,7 @@ var HomeView = React.createClass({
       title: 'Notes',
       component: Views.Notes,
       hidePrev: false,
-      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'}/>,
+      customNext: <CustomPlusButton plusView={Views.AddNote} title={'Add Note'} />,
     });
   },
 

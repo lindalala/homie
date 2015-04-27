@@ -34,13 +34,13 @@ var AddBillView = React.createClass({
       isDateModalOpen: false,
       isHousemateModalOpen: false,
       inputTitle: null,
-      inputText: null,
       inputHousemate: null,
       availableHousemates: [],
       noteAdded: null,
       dueDate: new Date(),
       loading: true,
-      hmCharges: []
+      hmCharges: [],
+      selectedIdx: 0
     }
   },
 
@@ -59,7 +59,7 @@ var AddBillView = React.createClass({
           });
         }
       }
-      var initHm = housemates.shift();
+      var initHm = housemates[0];
       self.setState({availableHousemates: housemates,
                      hmCharges: [{'amount': 0,
                                   'target': initHm.target,
@@ -72,7 +72,7 @@ var AddBillView = React.createClass({
     this.setState({isDateModalOpen: true});
   },
 
-  openHousemateModal() {
+  openHousemateModal(idx) {
     this.setState({isHousemateModalOpen: true});
   },
 
@@ -88,59 +88,71 @@ var AddBillView = React.createClass({
 
   addBill() {
     var Bill = Parse.Object.extend('Bill');
-    var bill = new Bill();
+    var newBill = new Bill();
 
-    bill.set('name', this.state.inputName);
-    bill.set('dueDate', this.state.inputDate);
+    newBill.set('name', this.state.inputTitle);
+    newBill.set('dueDate', this.state.dueDate);
 
     var self = this;
-    bill.save().then(function(bill) {
-      // bill saved successfully.
-    }, function(error) {
-      // the save failed.
-      alert('Failed to create new object, with error code: ' + error.message);
-    }).then(function() {
+    newBill.save().then(function(bill) {
+      // sucess
       var house = bill.relation('house');
       var items = bill.relation('items');
       house.add(global.curHouse);
-      self.state.hmCharges.each(function(charge){
+      var totalAmount = 0;
+      for(var i=0; i< self.state.hmCharges.length; i++) {
+        var charge = self.state.hmCharges[i];
         // create BillItem
         var BillItem = Parse.Object.extend('BillItem');
         var billItem = new BillItem();
-        billItem.set('amount', hmCharge.amount); // add amount
-        billItem.save().then(function(bItem){
-          // add item to items relation
-          items.add(bItem);
-          // get ower relation
-          var ower = billItem.relation('ower');
-          var query = new Parse.Query(Parse.User);
-          // query for user with matching ID
-          query.equalTo("objectId", charge.id);
-          query.find({
-            success: function(matchedList) {
-              ower.add(matchedList[0]); // add user to relation
-              bItem.save();
-            }
+        totalAmount += charge.amount;
+        billItem.set('amount', charge.amount); // add amount
+        billItem.set('done', false); // bill not yet paid
+
+        (function(charge) {
+          billItem.save().then(function(billItem){
+            // get ower relation
+            // add item to items relation
+            items.add(billItem);
+            bill.save();
+            var ower = billItem.relation('ower');
+            console.log(charge.id);
+            var query = new Parse.Query(Parse.User);
+            // query for user with matching ID
+            query.equalTo("objectId", charge.id);
+            query.find({
+              success: function(matchedList) {
+                ower.add(matchedList[0]); // add user to relation
+                billItem.save();
+              }
+            });
           });
-        });
-      });
+        })(charge);
+      }
+      bill.set('amount', Number(parseFloat(totalAmount).toFixed(2)));
       bill.save();
+    }, function(error) {
+      alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
       self.props.navigator.pop();
     });
   },
 
   addNewCharge() {
-    this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$push: [{'amount': 0, 'target': 'select housemate'}]})});
+    var newTarget = this.state.availableHousemates[this.state.selectedIdx];
+    newTarget.amount = 0.00;
+    this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$push: [newTarget]})});
+    this.closeModal();
   },
 
   updateAmount(amt, idx) {
     var newHmCharge = this.state.hmCharges[idx];
-    newHmCharge.amount = parseFloat(amt).toFixed(2);
+    newHmCharge.amount = Number(parseFloat(amt).toFixed(2));
     this.setState({hmCharges: React.addons.update(this.state.hmCharges,{$splice: [[idx,1,newHmCharge]]})});
   },
 
-  updateTarget(targetIdx, idx) {
+  updateTarget(targetIdx) {
+    var idx = this.state.selectedIdx;
     var newHmCharge = this.state.hmCharges[idx];
     newHmCharge.target = this.state.availableHousemates[targetIdx].target;
     newHmCharge.id = this.state.availableHousemates[targetIdx].id;
@@ -170,7 +182,7 @@ var AddBillView = React.createClass({
       </Overlay>);
   },
 
-  renderHousemateModal(idx) {
+  renderHousemateModal() {
     return (
       <Overlay isVisible={this.state.isHousemateModalOpen}>
         <View style={styles.overlay} pointerEvents="box-none">
@@ -178,8 +190,8 @@ var AddBillView = React.createClass({
             <H1>Add housemate</H1>
             <PickerIOS
               style={styles.hmPicker}
-              selectedValue={0}
-              onValueChange={(tIdx) => this.updateTarget(tIdx, idx)}>
+              selectedValue={this.state.selectedIdx}
+              onValueChange={(tIdx) => this.setState({selectedIdx: tIdx})}>
               {this.state.availableHousemates.map((hm, idx) => (
                 <PickerItemIOS
                   key={idx}
@@ -189,7 +201,7 @@ var AddBillView = React.createClass({
                 )
               )}
             </PickerIOS>
-            <TouchableOpacity onPress={this.closeModal}>
+            <TouchableOpacity onPress={this.addNewCharge}>
               <View>
                 <Text style={styles.buttonText}>
                   Add
@@ -220,13 +232,11 @@ var AddBillView = React.createClass({
             onEndEditing={(event) => self.updateAmount(event.nativeEvent.text, idx)}
             placeholder={'$' + charge.amount}
           />
-          <TouchableOpacity onPress={() => self.openHousemateModal(idx)}>
-              <View style={styles.chargeName}>
-                <Text style={styles.buttonText}>
-                  {charge.target}
-                </Text>
-              </View>
-          </TouchableOpacity>
+          <View style={styles.chargeName}>
+            <Text style={styles.buttonText}>
+              {charge.target}
+            </Text>
+          </View>
         </View>
       )
     });
@@ -248,14 +258,14 @@ var AddBillView = React.createClass({
           <Text>Charge Housemates</Text>
           {hmCharges}
           {hmModal}
-          <TouchableOpacity onPress={this.addNewCharge}>
+          <TouchableOpacity onPress={this.openHousemateModal}>
               <View>
                 <Text style={styles.buttonText}>
                   + add another housemate
                 </Text>
               </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.addNote}>
+          <TouchableOpacity onPress={this.addBill}>
               <View>
                 <Text style={styles.buttonText}>
                   add bill

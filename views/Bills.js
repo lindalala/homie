@@ -21,7 +21,7 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {
-  Home: require('./Home.js'),
+  BillItems: require('./BillItems.js'),
   Loading: require('./Loading.js')
 };
 
@@ -40,10 +40,10 @@ var BillsView = React.createClass({
 
   fetchBill(bill) {
     return {
+      id: bill.id,
       title: bill.get('name'),
-      content: bill.get('amount'),
-      author: bill.get('dueDate'),
-      createdAt: bill.createdAt
+      amount: bill.get('amount'),
+      dueDate: bill.get('dueDate')
     }
   },
 
@@ -57,16 +57,13 @@ var BillsView = React.createClass({
       success: function(bills) {
         // bills is a list of bills in curHouse
         if (bills.length) {
-          var fetchedBills = bills.map(self.fetchBill);
-          Promise.all(fetchedBills).then(function(bills) {
-            self.setState({
-              dataSource: self.state.dataSource.cloneWithRows(bills),
-              loading: false
-            });
+          self.setState({
+            dataSource: self.state.dataSource.cloneWithRows(bills.map(self.fetchBill)),
+            loading: false
           });
         } else {
           // no notes found
-          self.setState({notes: [], loading: false});
+          self.setState({loading: false});
         }
       },
       error: function(error) {
@@ -75,20 +72,31 @@ var BillsView = React.createClass({
     });
   },
 
-  renderNoteCell(note) {
-    return (<NoteCell title={note.title}
-                      content={note.content}
-                      author={note.author}
-                      createdAt={note.createdAt} />);
+  enterBill(billId, billTitle) {
+    this.props.navigator.push({
+      navBar: true,
+      title: billTitle,
+      component: Views.BillItems,
+      data: {billId: billId},
+      hidePrev: false,
+    });
+  },
+
+  renderBillCell(bill) {
+    return (<BillCell id={bill.id}
+                      title={bill.title}
+                      amount={bill.amount}
+                      dueDate={bill.dueDate}
+                      onPress={() => this.enterBill(bill.id, bill.title)}/>);
   },
 
   render() {
     var content = this.state.loading ?
                     <Views.Loading /> :
                     (<ListView
-                      style={styles.notesList}
+                      style={styles.billList}
                       dataSource={this.state.dataSource}
-                      renderRow={this.renderNoteCell}/>);
+                      renderRow={this.renderBillCell}/>);
 
     return (
       <View style={styles.contentContainer}>
@@ -97,17 +105,19 @@ var BillsView = React.createClass({
   }
 });
 
-var NoteCell = React.createClass({
+var BillCell = React.createClass({
   render() {
+    var dueDate = moment(this.props.dueDate) < moment(new Date()).add('hours', 22) ? 'today' : moment(this.props.dueDate).fromNow();
     return (
-      <View style={styles.note}>
-        <H1 style={{marginBottom: 5}}>{this.props.title}</H1>
-        <H2><H2 style={{fontFamily: 'MetaPro'}}>by</H2> {this.props.author}</H2>
-        <Text style={{marginTop: 15, marginBottom: 15}}>{this.props.content}</Text>
-        <Text style={{color: CoreStyle.colors.lightPurple}}>
-          {moment(this.props.createdAt).fromNow()}
-        </Text>
-      </View>);
+      <TouchableOpacity onPress={this.props.onPress}>
+          <View style={styles.bill}>
+          <H1 style={{marginBottom: 5}}>{this.props.title}</H1>
+          <Text style={{color: CoreStyle.colors.lightPurple}}>
+            {'$' + this.props.amount} due {dueDate}
+          </Text>
+        </View>
+      </TouchableOpacity>);
+
   }
 });
 
@@ -115,12 +125,12 @@ var styles = StyleSheet.create({
   contentContainer: {
     flex:1
   },
-  notesList: {
+  billList: {
     flex:1,
     backgroundColor: CoreStyle.colors.background,
     paddingTop: 1
   },
-  note: {
+  bill: {
     backgroundColor: CoreStyle.colors.paleBlue,
     marginTop: 1,
     marginBottom: 1,

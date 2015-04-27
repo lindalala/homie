@@ -82,7 +82,7 @@ var AppNavigatorView = React.createClass({
     return (
       <View style={styles.container}>
         {navBar}
-        <Component navigator={navigator} route={route} />
+        <Component navigator={navigator} route={route} refreshParent={route.refreshParent} />
       </View>
     );
   },
@@ -94,7 +94,7 @@ var AppNavigatorView = React.createClass({
       if (global.curHouse) {
         // route to default home
         initRoute = {
-          component: Views.Setup,
+          component: Views.Home,
           navBar: true,
           title: global.curHouse.get('name'),
           hidePrev: true,
@@ -115,7 +115,6 @@ var AppNavigatorView = React.createClass({
           debugOverlay={false}
           style={styles.navigator}
           initialRoute={initRoute}
-          onWillFocus={this.onWillFocus}
         />
       );
     }

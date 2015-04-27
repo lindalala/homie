@@ -14,7 +14,8 @@ var {
 var {
   H1,
   H2,
-  Text
+  Text,
+  CustomPlusButton
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
@@ -38,6 +39,7 @@ var NotesView = React.createClass({
 
   componentDidMount() {
     this.fetchData();
+
   },
 
   fetchNote(note) {
@@ -54,7 +56,14 @@ var NotesView = React.createClass({
     });
   },
 
+  onWillFocus() {
+    alert('Will focus on Note');
+  },
+
   fetchData() {
+    // Set loading back to true, in case it is a refresh call
+    this.setState({loading: true});
+
     var self = this;
     // query for notes that are in current house
     var Note = Parse.Object.extend('Note');
