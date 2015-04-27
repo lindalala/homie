@@ -27,7 +27,6 @@
 		ABA0F7D61AD4B27E00BA01BA /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D21AD4B27E00BA01BA /* FBSDKLoginKit.framework */; };
 		ABA0F7D71AD4B27E00BA01BA /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */; };
 		ABFD32BF1ACBB8FF00BC5018 /* FacebookLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */; };
-		ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = ABFD32C01ACBC05900BC5018 /* background.mp4 */; };
 		D1BF40241AE9A0E900A72538 /* MetaPro-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401C1AE9A0E900A72538 /* MetaPro-BookItalic.otf */; };
 		D1BF40251AE9A0E900A72538 /* MetaPro-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401D1AE9A0E900A72538 /* MetaPro-Medium.otf */; };
 		D1BF40261AE9A0E900A72538 /* MetaPro-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D1BF401E1AE9A0E900A72538 /* MetaPro-MediumItalic.otf */; };
@@ -136,7 +135,6 @@
 		ABA0F7D31AD4B27E00BA01BA /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = iOS/Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		ABFD32BD1ACBB8FF00BC5018 /* FacebookLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FacebookLoginManager.h; path = iOS/FacebookLoginManager.h; sourceTree = "<group>"; };
 		ABFD32BE1ACBB8FF00BC5018 /* FacebookLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacebookLoginManager.m; path = iOS/FacebookLoginManager.m; sourceTree = "<group>"; };
-		ABFD32C01ACBC05900BC5018 /* background.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = background.mp4; sourceTree = "<group>"; };
 		D1BF401C1AE9A0E900A72538 /* MetaPro-BookItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-BookItalic.otf"; sourceTree = "<group>"; };
 		D1BF401D1AE9A0E900A72538 /* MetaPro-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-Medium.otf"; sourceTree = "<group>"; };
 		D1BF401E1AE9A0E900A72538 /* MetaPro-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MetaPro-MediumItalic.otf"; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				ABFD32C01ACBC05900BC5018 /* background.mp4 */,
 				ABFD32BC1ACBB57200BC5018 /* Frameworks */,
 				13B07FAE1A68108700A75B9A /* Homie */,
 				D1BF400A1AE99EE600A72538 /* Resources */,
@@ -516,7 +513,6 @@
 				D1BF40261AE9A0E900A72538 /* MetaPro-MediumItalic.otf in Resources */,
 				D1BF40271AE9A0E900A72538 /* MetaPro-Normal_30266.ttf in Resources */,
 				D1BF402A1AE9A0E900A72538 /* Meta-bold-roman.ttf in Resources */,
-				ABFD32C11ACBC05900BC5018 /* background.mp4 in Resources */,
 				D1BF402B1AE9A0E900A72538 /* Meta-book-roman.ttf in Resources */,
 				D1BF40251AE9A0E900A72538 /* MetaPro-Medium.otf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -557,7 +553,7 @@
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -583,7 +579,7 @@
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

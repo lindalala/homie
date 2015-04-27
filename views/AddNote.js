@@ -96,7 +96,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     marginTop: 30,
-    borderRadius: 3,
     paddingVertical: 10,
     backgroundColor: 'transparent'
   },

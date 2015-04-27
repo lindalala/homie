@@ -76,7 +76,7 @@ var ShoppingItemsView = React.createClass({
       if (item2.done) {
         return -1;
       } else {
-        return (item2.createdAt - item1.createdAt);
+        return (item2.updatedAt - item1.updatedAt);
       }
     }
   },
@@ -101,7 +101,7 @@ var ShoppingItemsView = React.createClass({
                   name: item,
                   author: global.curUser.get('name'),
                   done: false,
-                  createdAt: newItem.createdAt };
+                  updatedAt: newItem.updatedAt };
       var newItems = React.addons.update(self.state.items,{$push: [itemInfo]});
       newItems.sort(self.compareItems);
       self.setState({
@@ -122,7 +122,6 @@ var ShoppingItemsView = React.createClass({
         name: item.get('name'),
         done: item.get('done'),
         author: author.get('name'),
-        createdAt: item.createdAt,
         updatedAt: item.updatedAt
       };
     });
@@ -167,7 +166,7 @@ var ShoppingItemsView = React.createClass({
           <H1 style={{marginBottom: 10}}>{item.name}</H1>
           <H2>
             <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {item.author} -
-            <H2 style={{fontFamily: 'MetaPro'}}> {moment(item.createdAt).fromNow()}</H2>
+            <H2 style={{fontFamily: 'MetaPro'}}> {moment(item.updatedAt).fromNow()}</H2>
           </H2>
         </View>
         <Image style={styles.icon} source={icon} resizeMode="contain" />

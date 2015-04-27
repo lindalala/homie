@@ -128,7 +128,7 @@ CoreStyle.Button = React.createClass({
       alignItems: 'center',
       backgroundColor: CoreStyle.colors.mediumBlue,
       height: 60,
-      borderRadius: 30
+      borderRadius: 30,
     },
     text: {
       fontFamily: 'MetaBold-Roman',

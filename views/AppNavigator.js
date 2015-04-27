@@ -82,7 +82,7 @@ var AppNavigatorView = React.createClass({
     return (
       <View style={styles.container}>
         {navBar}
-        <Component navigator={navigator} route={route} refreshParent={route.refreshParent} />
+        <Component navigator={navigator} route={route} />
       </View>
     );
   },
@@ -104,7 +104,8 @@ var AppNavigatorView = React.createClass({
         // route to create/join house
         initRoute = {
           component: Views.Setup,
-          navBar: false,
+          navBar: true,
+          title: 'New Home'
         }
       }
 

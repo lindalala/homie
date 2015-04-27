@@ -26,16 +26,11 @@ var Views = {
   Shopping: require('./Shopping.js'),
   AddShopping: require('./AddShopping.js'),
   Chores: require('./Chores.js'),
-  Messages: require('./Messages.js')
+  Messages: require('./Messages.js'),
+  Settings: require('./Settings.js')
 };
 
 var HomeView = React.createClass({
-  getInitialState() {
-    return {
-
-    }
-  },
-
   notesPressed() {
     this.props.navigator.push({
       navBar: true,
@@ -84,6 +79,15 @@ var HomeView = React.createClass({
     });
   },
 
+  settingsPressed() {
+    this.props.navigator.push({
+      navBar: true,
+      title: 'Settings',
+      component: Views.Settings,
+      hidePrev: false
+    });
+  },
+
   render() {
     return (
       <View style={styles.contentContainer}>
@@ -124,7 +128,7 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.settingsPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}

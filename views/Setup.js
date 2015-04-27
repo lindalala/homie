@@ -8,17 +8,19 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ScrollView,
+  PixelRatio,
+  Navigator
 } = React;
 var {
-  Text
+  Text,
+  H2,
+  Button,
+  TextInput
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
-
-// App views
-var Views = {};
-Views.Home = require('./Home.js');
 
 var STATUS = {ENTER: 0, SETUP: 1};
 
@@ -42,13 +44,13 @@ var SetupView = React.createClass({
       homies.add(global.curUser);
       house.save().then(function(house) {
         self.storeDefault(house);
-        self.props.navigator.push({
+        self.props.navigator.immediatelyResetRouteStack([{
           navBar: true,
           title: house.get('name'),
-          component: Views.Home,
+          component: require('./Home.js'),
           hidePrev: true,
           data: {houseId: house.id}
-        });
+        }]);
       });
     });
   },
@@ -67,13 +69,13 @@ var SetupView = React.createClass({
         global.curUser.save().then(function() {
           house.save().then(function() {
             self.storeDefault(house);
-            self.props.navigator.push({
+            self.props.navigator.immediatelyResetRouteStack([{
               navBar: true,
               title: house.get('name'),
-              component: Views.Home,
+              component: require('./Home.js'),
               hidePrev: true,
               data: {houseId: house.id}
-            });
+            }]);
           });
         });
       },
@@ -99,44 +101,24 @@ var SetupView = React.createClass({
   renderView() {
     return (
       <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <View style={styles.buttonContents}>
-            <Text>
-              Create House
-            </Text>
-            <TextInput
+      <Image source={require('image!housesBg')} style={styles.bgImage} />
+        <ScrollView style={styles.contentContainer}>
+          <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
-              placeholder="enter house name"
+              placeholder="Home Name"
             />
-          <TouchableOpacity onPress={this.createHouse}>
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonText}>
-                  Enter House
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <Button onPress={this.createHouse} text="build home"/>
+          <View style={styles.or}>
+          <H2>- or -</H2>
           </View>
-
-          <View style={styles.buttonContents}>
-            <Text>
-              Join House
-            </Text>
-            <TextInput
+          <TextInput
               style={styles.textInput}
               onSubmitEditing={(text) => this.setState({input: text.nativeEvent.text})}
-              placeholder="enter house id"
+              placeholder="Home ID"
             />
-          <TouchableOpacity onPress={this.joinHouse}>
-              <View style={styles.loginButton}>
-                <Text style={styles.buttonText}>
-                  Enter House
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+          <Button onPress={this.joinHouse} text="enter home" />
+        </ScrollView>
       </View>);
   },
 
@@ -148,28 +130,12 @@ var SetupView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  buttonContents: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
-    padding: 5,
-    backgroundColor: '#EAEAEA',
-    borderRadius: 3,
-    paddingVertical: 10,
+    paddingTop: 60,
+    marginHorizontal: 45
   },
   background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
+    flex: 1,
+    backgroundColor: 'transparent',
   },
   buttonText: {
     fontSize: 20,
@@ -179,21 +145,19 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
   textInput: {
-    height: 5,
-    borderWidth: 0.5,
-    borderColor: '#0f0f0f',
-    padding: 4,
-    flex: 1,
-    fontSize: 13,
+    marginBottom: 5,
+  },
+  bgImage: {
+    position: 'absolute',
+    bottom: 0,
+    left:0,
+    right:0,
+    height: 200,
+  },
+  or: {
+    alignItems: 'center',
+    paddingVertical: 30
   }
 });
 
