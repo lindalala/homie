@@ -25,7 +25,8 @@ var Views = {
   AddBill: require('./AddBill.js'),
   Shopping: require('./Shopping.js'),
   AddShopping: require('./AddShopping.js'),
-  Chores: require('./Chores.js')
+  Chores: require('./Chores.js'),
+  Messages: require('./Messages.js')
 };
 
 var HomeView = React.createClass({
@@ -70,6 +71,15 @@ var HomeView = React.createClass({
       navBar: true,
       title: 'Chores',
       component: Views.Chores,
+      hidePrev: false
+    });
+  },
+
+  msgsPressed() {
+    this.props.navigator.push({
+      navBar: true,
+      title: 'Messages',
+      component: Views.Messages,
       hidePrev: false
     });
   },
@@ -130,7 +140,7 @@ var HomeView = React.createClass({
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.notesPressed}>
+          <TouchableOpacity onPress={this.msgsPressed}>
             <Image
               style={styles.button}
               resizeMode={Image.resizeMode.contain}
