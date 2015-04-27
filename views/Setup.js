@@ -16,10 +16,6 @@ var {
 
 var Parse = require('parse').Parse;
 
-// App views
-var Views = {};
-Views.Home = require('./Home.js');
-
 var STATUS = {ENTER: 0, SETUP: 1};
 
 var SetupView = React.createClass({
@@ -42,13 +38,13 @@ var SetupView = React.createClass({
       homies.add(global.curUser);
       house.save().then(function(house) {
         self.storeDefault(house);
-        self.props.navigator.push({
+        self.props.navigator.immediatelyResetRouteStack([{
           navBar: true,
           title: house.get('name'),
-          component: Views.Home,
+          component: require('./Home.js'),
           hidePrev: true,
           data: {houseId: house.id}
-        });
+        }]);
       });
     });
   },
@@ -67,13 +63,13 @@ var SetupView = React.createClass({
         global.curUser.save().then(function() {
           house.save().then(function() {
             self.storeDefault(house);
-            self.props.navigator.push({
+            self.props.navigator.immediatelyResetRouteStack([{
               navBar: true,
               title: house.get('name'),
-              component: Views.Home,
+              component: require('./Home.js'),
               hidePrev: true,
               data: {houseId: house.id}
-            });
+            }]);
           });
         });
       },

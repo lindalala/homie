@@ -1,89 +1,124 @@
 var React = require('react-native');
+var moment = require('moment');
 var CoreStyle = require('./CoreStyle.js');
 var {
-  AppRegistry,
+  ActivityIndicatorIOS,
   AsyncStorage,
   StyleSheet,
   View,
   TouchableHighlight,
-  Image
+  TouchableOpacity,
+  Image,
+  ListView
 } = React;
 var {
-  Text
+  H1,
+  H2,
+  Text,
+  CustomPlusButton
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
 
 // App views
-var Views = {};
-Views.CreateHome = require('./CreateHome.js');
-Views.JoinHome = require('./JoinHome.js');
-Views.Home = require('./Home.js');
+var Views = {
+  Loading: require('./Loading.js')
+};
+
+var STATUS = {ENTER: 0, SETUP: 1};
 
 var HomesView = React.createClass({
   getInitialState() {
     return {
-      houses: null,
-      curUserName: Parse.User.current().get('name'),
-      selectedHouseId: null,
+      dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
+      loading: true
     }
   },
 
-  createHouse() {
-    // Navigate to CreateHome view
-    this.props.navigator.push({
-      title: 'Create Home',
-      component: Views.CreateHome
-    });
-  },
-
-  joinHouse() {
-    // Navigate to JoinHome view
-    this.props.navigator.push({
-      title: 'Join Home',
-      component: Views.JoinHome
-    });
-  },
-
-  enterHouse(name, id) {
-    // Navigate to Home view
-    this.props.navigator.push({
-      navBar: true,
-      title: name,
-      component: Views.Home,
-      data: {houseId: id}
-    });
-  },
-
-  makeHouse(house) {
-    return (<TouchableHighlight onPress={this.enterHouse.bind(this, house.get('name'), house.id)}>
-                <View style={styles.button}>
-                  <Text style={styles.buttonText}>
-                    {house.get('name')}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            )
-  },
-
   componentDidMount() {
-    var self = this;
-    // query for houses that contain Parse.User.current()
+    this.fetchData();
+  },
+
+  storeDefault(house) {
+    AsyncStorage.setItem("@Homie:defaultHouse", house.id, (error) => {
+      if (error) {
+        self._appendMessage('AsyncStorage error: ' + error.message);
+      } else {
+        // sucessfully stored user data to disk
+        global.curHouse = house;
+      }
+    });
+  },
+
+  enterHouse(houseToEnter) {
     var House = Parse.Object.extend('House');
-    var houseQuery = new Parse.Query(House);
-    houseQuery.equalTo('homies', global.curUser);
-    houseQuery.find({
-      success: function(homes) {
-        // homes is a list of homes Parse.User.current() belongs to
-        if (homes.length) {
-          self.setState({houses: homes.map(self.makeHouse)});
+    var query = new Parse.Query(House);
+
+    var self = this;
+    query.get(houseToEnter.id, {
+      success: function(house) {
+        // The object was retrieved successfully.
+        self.storeDefault(house);
+        self.props.navigator.immediatelyResetRouteStack([{
+          navBar: true,
+          title: house.get('name'),
+          component: require('./Home.js'),
+          hidePrev: true,
+          data: {houseId: house.id}
+        }]);
+      },
+      error: function(object, error) {
+        console.error(error.message);
+      }
+    });
+  },
+
+  fetchHouse(house) {
+    var homieRelation = house.relation('homies');
+    var query = homieRelation.query();
+    return query.find().then(function(list) {
+      var homies = list.filter(function(hm) {
+                                return (hm.id !== global.curUser.id);
+                              }).map(function(hm) {
+                                return (hm.get('firstName'));
+                              });
+      var isCurHouse = false;
+      if (house.id === curHouse.id) {
+        isCurHouse = true;
+      }
+      return {
+        id: house.id,
+        title: house.get('name'),
+        homies: homies,
+        isCurHouse: isCurHouse
+      };
+    });
+  },
+
+  fetchData() {
+    // Set loading back to true, in case it is a refresh call
+    this.setState({loading: true});
+
+    var self = this;
+    // query for curUser's houses
+    var House = Parse.Object.extend('House');
+    var query = new Parse.Query(House);
+    query.equalTo('homies', global.curUser);
+    query.find({
+      success: function(houses) {
+        // houses is a list of curUser's houses
+        if (houses.length) {
+          var fetchedHouses = houses.map(self.fetchHouse);
+          Promise.all(fetchedHouses).then(function(houses) {
+            houses.sort(function(h1, h2) {return (h1.isCurHouse) ? 1 : -1;});
+            self.setState({
+              dataSource: self.state.dataSource.cloneWithRows(houses),
+              loading: false
+            });
+          });
         } else {
-          // Parse.User.current() not currently in house
-          self.setState({houses: (<View style={styles.container}>
-                                      <Text style={styles.loading}>
-                                        NO HOUSES YET
-                                      </Text>
-                                  </View>)});
+          // no hosues found
+          self.setState({loading: false});
         }
       },
       error: function(error) {
@@ -92,86 +127,51 @@ var HomesView = React.createClass({
     });
   },
 
-  render() {
+  renderHouseCell(house) {
+    var displayedHomies = house.homies.slice(0,5).join(', ');
+    var numRest = house.homies.slice(5).length;
+    var homies = (numRest) ? displayedHomies + ' and ' + numRest + ' more' : displayedHomies;
     return (
-      <View style={styles.background}>
-        <View style={styles.backgroundOverlay} />
-        <View style={styles.contentContainer}>
-          <View>
-            <Text style={styles.name}>
-              Welcome {'\n'} {this.state.curUserName}!
-            </Text>
-          </View>
-
-          <View>
-            <Text style={styles.name}>
-            Your Homes:
-            </Text>
-            <View style={styles.houseList}>
-              {this.state.houses}
-            </View>
-          </View>
-
-          <TouchableHighlight onPress={this.createHouse}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>
-                Create New House
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this.joinHouse} activeOpacity={0.9} underlayColor="rgba(0,0,0,0.1)">
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>
-                Join House
-              </Text>
-            </View>
-          </TouchableHighlight>
-
+      <TouchableOpacity onPress={() => this.enterHouse(house)}>
+        <View style={styles.house}>
+          <H1 style={{marginBottom: 5}}>{house.title}</H1>
+          <H2> {homies} </H2>
         </View>
+      </TouchableOpacity>
+    );
+  },
+
+  render() {
+    var content = this.state.loading ?
+                    <Views.Loading /> :
+                    (<ListView
+                      style={styles.houseList}
+                      dataSource={this.state.dataSource}
+                      renderRow={this.renderHouseCell}/>);
+
+    return (
+      <View style={styles.contentContainer}>
+        {content}
       </View>);
   }
 });
 
+
 var styles = StyleSheet.create({
   contentContainer: {
-    flex:1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  loading: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
+    flex:1
   },
   houseList: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex:1,
+    backgroundColor: CoreStyle.colors.background,
+    paddingTop: 1
   },
-  name: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    marginTop: 15,
-    alignSelf: 'center',
-  },
+  house: {
+    backgroundColor: CoreStyle.colors.paleBlue,
+    marginTop: 1,
+    marginBottom: 1,
+    padding: 25
+  }
 });
 
 module.exports = HomesView;

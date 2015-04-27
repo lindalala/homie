@@ -16,6 +16,7 @@ var {
 PickerItemIOS = PickerIOS.Item;
 var {
   H1,
+  Button,
   Text,
   TextInput
 } = CoreStyle;
@@ -213,7 +214,7 @@ var AddBillView = React.createClass({
     );
   },
 
-  renderView() {
+  render() {
     if (this.state.loading) {
       return (<View style={styles.contentContainer}>
                 <Views.Loading />
@@ -240,15 +241,14 @@ var AddBillView = React.createClass({
       )
     });
     return (
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          {dateModal}
-          <View style={styles.buttonContents}>
-            <TextInput
-              style={styles.textInput}
-              onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-              placeholder="bill name"
-            />
+      <ScrollView style={styles.contentContainer}>
+        {dateModal}
+        <View style={styles.buttonContents}>
+          <TextInput
+            style={styles.textInput}
+            onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
+            placeholder="bill name"
+          />
           <TouchableOpacity onPress={this.openDateModal}>
             <View>
               <Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</Text>
@@ -264,52 +264,23 @@ var AddBillView = React.createClass({
                 </Text>
               </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.addBill}>
-              <View>
-                <Text style={styles.buttonText}>
-                  add bill
-                </Text>
-              </View>
-          </TouchableOpacity>
-          </View>
         </View>
+        <Button onPress={this.addBill} text="create bill" />
       </ScrollView>);
-  },
-
-  render() {
-    return this.renderView();
   }
 });
 
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'stretch',
+    paddingHorizontal: 25
   },
   buttonContents: {
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 40,
-    marginVertical: 40,
     padding: 5,
     backgroundColor: '#EAEAEA',
-    borderRadius: 3,
     paddingVertical: 10,
-  },
-  background: {
-    flex: 1
-  },
-  backgroundOverlay: {
-    opacity: 0.85,
-    backgroundColor: '#ffffff'
-  },
-  buttonText: {
-    fontSize: 20,
-    alignSelf: 'center'
   },
   houseList: {
     justifyContent: 'center',

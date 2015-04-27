@@ -82,7 +82,7 @@ var AppNavigatorView = React.createClass({
     return (
       <View style={styles.container}>
         {navBar}
-        <Component navigator={navigator} route={route} refreshParent={route.refreshParent} />
+        <Component navigator={navigator} route={route} />
       </View>
     );
   },
