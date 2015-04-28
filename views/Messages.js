@@ -20,6 +20,7 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var InvertibleScrollView = require('react-native-invertible-scroll-view');
 
 var Views = {
 	Home: require('./Home.js'),
@@ -56,10 +57,6 @@ var MsgView = React.createClass({
 		});
 	},
 
-	onWillFocus() {
-		alert('Will focus on Message');
-	},
-
 	fetchData() {
 		this.setState({loading: true});
 
@@ -90,7 +87,7 @@ var MsgView = React.createClass({
 	},
 
 	compareMessages(msg1, msg2) {
-		return (msg1.createdAt - msg2.createdAt);
+		return (msg2.createdAt - msg1.createdAt);
 	},
 
 	addMsg() {
@@ -137,17 +134,17 @@ var MsgView = React.createClass({
 		var content = this.state.loading ?
 				<Views.Loading /> :
 				(<ListView
-					renderScrollView={
-        				(props) => <InvertibleScrollView {...props} inverted />
-        			}
-					style={styles.msgsList}
 					dataSource={this.state.dataSource}
+					ref="scrollView"
+					renderScrollView={
+		        (props) => <InvertibleScrollView {...props} inverted />
+		      }
 					renderRow={this.renderMsgCell} />);
 		return (
 			<View style={{flex:1}}>
 				<View style={styles.contentContainer}>
 					{content}
-					<View style={{height: 80, marginTop: 10, borderRadius: 3, paddingVertical: 10}}>
+					<View style={styles.pillBox}>
 						<TextInput
 							value={this.state.inputText}
 							onChangeText={(text) => this.setState({inputText: text})}
@@ -170,9 +167,9 @@ var MsgCell = React.createClass({
 			<View style={styles.message}>
 				<Image style={styles.profPic} source={{uri: this.props.picture}} resizeMode="contain" />
 				<View style={{paddingLeft: 10, flex: 0.75}}>
-			        <H2 style={{fontFamily: 'MetaPro', fontSize: 10}}>{this.props.author}</H2>
+			        <H2 style={{fontFamily: 'MetaPro', fontSize: 15}}>{this.props.author}</H2>
 			        <Text style={{marginTop: 2, marginBottom: 6, fontSize: 16}}>{this.props.content}</Text>
-			        <H2 style={{fontFamily: 'MetaPro', fontSize: 8}}>
+			        <H2 style={{fontFamily: 'MetaPro', fontSize: 10}}>
 			          {moment(this.props.createdAt).format('MMMM Do, h:mm a')}
 			        </H2>
 			    </View>
@@ -209,7 +206,10 @@ var styles = StyleSheet.create({
   	width: 50,
   	height: 50,
 		borderRadius: 25
-  }
+  },
+	pillBox: {
+		padding: 20,
+	}
 });
 
 module.exports = MsgView;
