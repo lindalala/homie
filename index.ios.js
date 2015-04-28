@@ -128,22 +128,27 @@ var Homie = React.createClass({
   },
   renderLogInView() {
     return (
-      <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={require('image!homieLogo')}
-        />
-        <TouchableHighlight onPress={this.login}>
-          <View style={styles.loginButton}>
-            <Text style={styles.buttonText}>
-              login with Facebook
-            </Text>
-          </View>
-        </TouchableHighlight>
-        <Text style={styles.subheadingText}>
-            We will never post anything without permission
-        </Text>
-      </View>
+      <Image
+          style={styles.background}
+          source={require('image!homiebg')}>
+        <View style={styles.container}>
+          <Image
+            style={styles.logo}
+            source={require('image!homieLogo')}
+          />
+          <TouchableHighlight onPress={this.login}>
+            <View style={styles.loginButton}>
+              <Text style={styles.buttonText}>
+                login with Facebook
+              </Text>
+            </View>
+          </TouchableHighlight>
+          <Text style={styles.subheadingText}>
+              We will never post anything without permission
+          </Text>
+        </View>
+      </Image>
+
     );
   },
 
@@ -165,7 +170,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#333333',
+    backgroundColor: 'transparent'
   },
   background: {
     position: 'absolute',
