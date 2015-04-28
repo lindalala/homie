@@ -43,15 +43,14 @@ var AddNoteView = React.createClass({
     var self = this;
     note.save().then(function(note) {
       // house saved successfully.
-    }, function(error) {
-      // the save failed.
-      alert('Failed to create new object, with error code: ' + error.message);
-    }).then(function() {
       var house = note.relation('house');
       var author = note.relation('author');
       house.add(global.curHouse);
       author.add(global.curUser);
-      note.save();
+      return note.save();
+    }, function(error) {
+      // the save failed.
+      alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
       self.props.route.callPrevView();
       self.props.navigator.pop();

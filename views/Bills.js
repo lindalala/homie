@@ -63,8 +63,10 @@ var BillsView = React.createClass({
       success: function(bills) {
         // bills is a list of bills in curHouse
         if (bills.length) {
+          var renderedBills = bills.map(self.fetchBill);
+          renderedBills.sort(self.compareBills);
           self.setState({
-            dataSource: self.state.dataSource.cloneWithRows(bills.map(self.fetchBill)),
+            dataSource: self.state.dataSource.cloneWithRows(renderedBills),
             loading: false
           });
         } else {
@@ -76,6 +78,10 @@ var BillsView = React.createClass({
         alert("Error: " + error.code + " " + error.message);
       }
     });
+  },
+
+  compareBills(b1, b2) {
+    return (b1.dueDate - b2.dueDate);
   },
 
   enterBill(billId, billTitle) {

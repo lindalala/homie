@@ -63,9 +63,7 @@ var AddBillView = React.createClass({
       }
       var initHm = housemates[0];
       self.setState({availableHousemates: housemates,
-                     hmCharges: [{'amount': 0,
-                                  'target': initHm.target,
-                                  'id': initHm.id}],
+                     hmCharges: [],
                      loading: false});
     });
   },
@@ -131,7 +129,7 @@ var AddBillView = React.createClass({
         })(charge);
       }
       bill.set('amount', Number(parseFloat(totalAmount).toFixed(2)));
-      bill.save();
+      return bill.save();
     }, function(error) {
       alert('Failed to create new object, with error code: ' + error.message);
     }).then(function() {
@@ -248,7 +246,7 @@ var AddBillView = React.createClass({
     });
 
     if (this.state.hmCharges.length === 0) {
-      hmCharges = <React.Text>No housemates added</React.Text>;
+      hmCharges = <Text style={styles.noneText}> No housemates added </Text>;
     }
 
     return (
@@ -365,6 +363,9 @@ var styles = StyleSheet.create({
   hmPicker: {
     flex: 1,
     width: 300
+  },
+  noneText: {
+    justifyContent: 'center'
   }
 });
 

@@ -35,7 +35,7 @@ var AddShoppingView = React.createClass({
     shopList.save().then(function(list) {
       var house = list.relation('house');
       house.add(global.curHouse);
-      shopList.save();
+      return shopList.save();
     }).then(function() {
       self.props.route.callPrevView();
       self.props.navigator.pop();
