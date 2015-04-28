@@ -12,7 +12,6 @@ var {
   TouchableOpacity,
   Image,
   ListView,
-  CameraRoll,
   NativeModules
 } = React;
 var {
@@ -23,9 +22,6 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
-var CameraRollView = require('./CameraRollView.js');
-
-var CAMERA_ROLL_VIEW = 'camera_roll_view';
 
 // App views
 var Views = {
@@ -57,27 +53,11 @@ var AddPhotoView = React.createClass({
     }.bind(this));
   },
 
-  _renderImage(asset) {
-     var imageSize = 70;
-     var imageStyle = [styles.image, {width: imageSize, height: imageSize}];
-     return (
-       <View key={asset} style={styles.cell}>
-        <TouchableOpacity onPress={() => this.addPhoto(asset.node.image.uri)}>
-          <Image
-            source={asset.node.image}
-            style={imageStyle}
-          />
-         </TouchableOpacity>
-       </View>
-     );
-   },
-
   render() {
     return (
       <View style={styles.contentContainer}>
         <Camera
             ref="cam"
-            type="Front"
             style={styles.cameraView}
           />
         <TouchableOpacity onPress={() => this.refs.cam.switch()}>
@@ -104,15 +84,6 @@ var AddPhotoView = React.createClass({
 var styles = StyleSheet.create({
   contentContainer: {
     flex:1,
-  },
-  image: {
-    margin: 4,
-  },
-  info: {
-    flex: 1
-  },
-  cell: {
-    flex: 1
   },
   cameraView: {
     flex: 1
