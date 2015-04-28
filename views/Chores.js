@@ -92,12 +92,9 @@ var ChoresView = React.createClass({
     var chore = new Chore();
     chore.set('title', title);
     chore.set('done', false);
+    chore.set('author', global.curUser);
+    chore.set('house', global.curHouse);
     chore.save().then(function(newChore) {
-      var author = newChore.relation('author')
-      var house = newChore.relation('house');
-      author.add(global.curUser);
-      house.add(global.curHouse);
-      newChore.save();
       var choreInfo = {id: newChore.id,
                        title: title,
                        author: global.curUser.get('name'),
@@ -114,17 +111,24 @@ var ChoresView = React.createClass({
   },
 
   fetchChore(chore) {
-    var authorRelation = chore.relation('author');
-    var authorQuery = authorRelation.query();
-    return authorQuery.find().then(function(list) {
-      var author = list[0];
-      return {
+    var author = chore.get('author');
+    var completer = chore.get('completer');
+    return author.fetch().then(function(author) {
+      var choreInfo = {
         id: chore.id,
         title: chore.get('title'),
         done: chore.get('done'),
         author: author.get('name'),
         updatedAt: chore.updatedAt
       };
+      if (chore.done) {
+        return completer.fetch.then(function(completer) {
+          choreInfo.completer = completer.get('name');
+          return choreInfo;
+        });
+      } else {
+        return choreInfo;
+      }
     });
   },
 
@@ -133,7 +137,7 @@ var ChoresView = React.createClass({
       if (this.state.chores[i].id === choreId) {
         var newChore = React.addons.update(this.state.chores[i], {
           done: {$set: true},
-          author: {$set: global.curUser.get('name')},
+          completer: {$set: global.curUser.get('name')},
           updatedAt: {$set: new Date()}
         });
 
@@ -149,8 +153,7 @@ var ChoresView = React.createClass({
     var Chore = Parse.Object.extend('Chore');
     var query = new Parse.Query(Chore);
     query.get(choreId).then(function(chore) {
-      var completer = chore.relation('author');
-      completer.add(global.curUser);
+      chore.set('completer', global.curUser);
       chore.set('done', true);
       chore.save();
     });
@@ -160,13 +163,14 @@ var ChoresView = React.createClass({
     var icon = chore.done ? require('image!checked') : require('image!unchecked');
     var byText = chore.done ? 'completed by' : 'requested by';
     var bgColor = chore.done ? CoreStyle.colors.palePurple : CoreStyle.colors.paleBlue;
+    var person = chore.done ? chore.completer : chore.author;
 
     var rowContents = (
       <View style={[styles.listItem, {backgroundColor: bgColor}]}>
         <View>
           <H1 style={{marginBottom: 10}}>{chore.title}</H1>
           <H2>
-            <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {chore.author} -
+            <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {person} -
             <H2 style={{fontFamily: 'MetaPro'}}> {moment(chore.updatedAt).fromNow()}</H2>
           </H2>
         </View>

@@ -75,7 +75,7 @@ var Homie = React.createClass({
   login() {
     FacebookLoginManager.newSession((error, info) => {
       if (error) {
-        this.setState({result: error, status: -1});
+        this.setState({result: error, status: STATUS.NEW});
       } else {
         this.setState({token: info.token, userId: info.userId});
         this.getUser();

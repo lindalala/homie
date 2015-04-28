@@ -47,11 +47,13 @@ var ShoppingView = React.createClass({
   },
 
   enterList(shopList) {
+    var self = this;
     this.props.navigator.push({
       navBar: true,
       title: shopList.get('title'),
       component: Views.ShoppingItems,
       data: {shopList: shopList},
+      onPrev: function(){self.fetchData(); self.props.navigator.pop();},
       hidePrev: false,
     });
   },

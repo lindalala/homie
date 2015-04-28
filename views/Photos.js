@@ -23,11 +23,9 @@ var Parse = require('parse').Parse;
 
 // App views
 var Views = {
-  Loading: require('./Loading.js')
+  Loading: require('./Loading.js'),
+  AddPhoto: require('./AddPhoto.js')
 };
-
-
-var STATUS = {ENTER: 0, SETUP: 1};
 
 var PhotosView = React.createClass({
   getInitialState() {
@@ -105,9 +103,10 @@ var PhotosView = React.createClass({
     return (
       <View style={styles.contentContainer}>
         <NavigationBar navigator={this.props.navigator}
-                                backgroundColor={CoreStyle.colors.lightPurple}
-                                title="Photos"
-                                titleColor={CoreStyle.colors.mediumBlue} />
+                       customNext={<CustomPlusButton plusView={Views.AddPhoto} title={'Select Photo'} callPrevView={this.fetchData} />}
+                       backgroundColor={CoreStyle.colors.lightPurple}
+                       title="Photos"
+                       titleColor={CoreStyle.colors.mediumBlue} />
         {content}
       </View>);
   }

@@ -24,8 +24,6 @@ var Parse = require('parse').Parse;
 var Views = {};
 Views.Loading = require('./Loading.js');
 
-var STATUS = {ENTER: 0, SETUP: 1};
-
 var ShoppingItemsView = React.createClass({
   getInitialState() {
     return {
@@ -88,19 +86,17 @@ var ShoppingItemsView = React.createClass({
     var shopItem = new ShopItem();
     shopItem.set('name', item);
     shopItem.set('done', false);
+    shopItem.set('author', global.curUser);
     shopItem.save().then(function(newItem) {
-      var author = newItem.relation('author')
-      author.add(global.curUser);
-      newItem.save();
       var items = self.state.shopList.relation('items');
       items.add(newItem);
       self.state.shopList.save();
 
       var itemInfo = {id: newItem.id,
-                  name: item,
-                  author: global.curUser.get('name'),
-                  done: false,
-                  updatedAt: newItem.updatedAt };
+                      name: item,
+                      author: global.curUser.get('name'),
+                      done: false,
+                      updatedAt: newItem.updatedAt };
       var newItems = React.addons.update(self.state.items,{$push: [itemInfo]});
       newItems.sort(self.compareItems);
       self.setState({
@@ -112,17 +108,25 @@ var ShoppingItemsView = React.createClass({
   },
 
   fetchItem(item) {
-    var authorRelation = item.relation('author');
-    var authorQuery = authorRelation.query();
-    return authorQuery.find().then(function(list) {
-      var author = list[0];
-      return {
+    var author = item.get('author');
+    var completer = item.get('completer');
+    return author.fetch().then(function(author) {
+      var itemInfo = {
         id: item.id,
         name: item.get('name'),
         done: item.get('done'),
         author: author.get('name'),
         updatedAt: item.updatedAt
       };
+
+      if (item.done) {
+        return completer.fetch().then(function(completer) {
+            itemInfo.completer = completer.get('name');
+            return itemInfo;
+        });
+      } else {
+        return itemInfo;
+      }
     });
   },
 
@@ -131,7 +135,7 @@ var ShoppingItemsView = React.createClass({
       if (this.state.items[i].id === itemId) {
         var newItem = React.addons.update(this.state.items[i], {
           done: {$set: true},
-          author: {$set: global.curUser.get('name')},
+          completer: {$set: global.curUser.get('name')},
           updatedAt: {$set: new Date()}
         });
 
@@ -147,8 +151,7 @@ var ShoppingItemsView = React.createClass({
     var ShopItem = Parse.Object.extend('ShoppingItem');
     var query = new Parse.Query(ShopItem);
     query.get(itemId).then(function(item) {
-      var completer = item.relation('author');
-      completer.add(global.curUser);
+      item.set('completer', global.curUser);
       item.set('done', true);
       item.save();
     });
@@ -158,13 +161,14 @@ var ShoppingItemsView = React.createClass({
     var icon = item.done ? require('image!checked') : require('image!unchecked');
     var byText = item.done ? 'bought by' : 'requested by';
     var bgColor = item.done ? CoreStyle.colors.palePurple : CoreStyle.colors.paleBlue;
+    var person = item.done ? item.completer : item.author;
 
     var rowContents = (
       <View style={[styles.listItem, {backgroundColor: bgColor}]}>
         <View>
           <H1 style={{marginBottom: 10}}>{item.name}</H1>
           <H2>
-            <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {item.author} -
+            <H2 style={{fontFamily: 'MetaPro'}}>{byText}</H2> {person} -
             <H2 style={{fontFamily: 'MetaPro'}}> {moment(item.updatedAt).fromNow()}</H2>
           </H2>
         </View>

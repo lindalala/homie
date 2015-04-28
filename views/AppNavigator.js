@@ -74,6 +74,7 @@ var AppNavigatorView = React.createClass({
                               hidePrev={route.hidePrev}
                               customPrev={route.customPrev}
                               customNext={route.customNext}
+                              onPrev={route.onPrev}
                               onNext={route.onNext}
                               title={route.title}
                               titleColor={CoreStyle.colors.mediumBlue} />;
