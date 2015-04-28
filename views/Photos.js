@@ -148,10 +148,11 @@ var styles = StyleSheet.create({
   },
   bottomRow: {
     height: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     flexDirection: 'row',
   },
   icon: {
+    marginLeft: 10,
     height: 15,
     width: 15
   }

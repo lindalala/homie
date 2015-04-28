@@ -21,6 +21,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		AB23BAB61AEF01E000C8302A /* libViewport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB23BAB51AEF01DA00C8302A /* libViewport.a */; };
+		AB23BABF1AF0457800C8302A /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB23BABE1AF0456B00C8302A /* libRCTCamera.a */; };
 		AB5E52FC1AEC9FCB00F7B069 /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5E52FA1AEC9C4500F7B069 /* libRNOverlay.a */; };
 		ABA0F7D41AD4B27E00BA01BA /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D01AD4B27E00BA01BA /* Bolts.framework */; };
 		ABA0F7D51AD4B27E00BA01BA /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */; };
@@ -108,6 +109,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = Viewport;
 		};
+		AB23BABD1AF0456B00C8302A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB23BAB91AF0456B00C8302A /* RCTCamera.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4107012F1ACB723B00C6AA39;
+			remoteInfo = RCTCamera;
+		};
 		AB5E52F91AEC9C4500F7B069 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */;
@@ -135,6 +143,7 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		AB23BAA61AEF01DA00C8302A /* Viewport.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Viewport.xcodeproj; path = "node_modules/react-native-viewport/Viewport.xcodeproj"; sourceTree = "<group>"; };
+		AB23BAB91AF0456B00C8302A /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "node_modules/react-native-camera/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNOverlay.xcodeproj; path = "node_modules/react-native-overlay/RNOverlay.xcodeproj"; sourceTree = "<group>"; };
 		ABA0F7D01AD4B27E00BA01BA /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = iOS/Frameworks/Bolts.framework; sourceTree = "<group>"; };
 		ABA0F7D11AD4B27E00BA01BA /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = iOS/Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -157,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB23BABF1AF0457800C8302A /* libRCTCamera.a in Frameworks */,
 				AB23BAB61AEF01E000C8302A /* libViewport.a in Frameworks */,
 				AB5E52FC1AEC9FCB00F7B069 /* libRNOverlay.a in Frameworks */,
 				00481BEA1AC0C89D00671115 /* libicucore.dylib in Frameworks */,
@@ -260,6 +270,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				AB23BAB91AF0456B00C8302A /* RCTCamera.xcodeproj */,
 				AB23BAA61AEF01DA00C8302A /* Viewport.xcodeproj */,
 				AB5E52F51AEC9C4500F7B069 /* RNOverlay.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -307,6 +318,14 @@
 			isa = PBXGroup;
 			children = (
 				AB23BAB51AEF01DA00C8302A /* libViewport.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB23BABA1AF0456B00C8302A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB23BABE1AF0456B00C8302A /* libRCTCamera.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -406,6 +425,10 @@
 				{
 					ProductGroup = 00C302B01ABCB8E700DB3ED1 /* Products */;
 					ProjectRef = 00C302AF1ABCB8E700DB3ED1 /* RCTAdSupport.xcodeproj */;
+				},
+				{
+					ProductGroup = AB23BABA1AF0456B00C8302A /* Products */;
+					ProjectRef = AB23BAB91AF0456B00C8302A /* RCTCamera.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -520,6 +543,13 @@
 			fileType = archive.ar;
 			path = libViewport.a;
 			remoteRef = AB23BAB41AEF01DA00C8302A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AB23BABE1AF0456B00C8302A /* libRCTCamera.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTCamera.a;
+			remoteRef = AB23BABD1AF0456B00C8302A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		AB5E52FA1AEC9C4500F7B069 /* libRNOverlay.a */ = {

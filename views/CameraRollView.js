@@ -228,6 +228,7 @@ var styles = StyleSheet.create({
     marginBottom: 14,
   },
   image: {
+    flex: 1,
     margin: 4,
   },
   info: {

@@ -10,6 +10,7 @@
     "object-assign": "*",
     "parse": "*",
     "react-native": "^0.4.0",
+    "react-native-camera": "^0.1.2",
     "react-native-navbar": "*",
     "react-native-overlay": "lindalala/react-native-overlay",
     "react-native-viewport": "lindalala/react-native-viewport"
