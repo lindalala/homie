@@ -21,6 +21,8 @@ var {
 
 var Parse = require('parse').Parse;
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var Views = {
 	Home: require('./Home.js'),
@@ -31,11 +33,19 @@ var STATUS = {ENTER: 0, SETUP: 1};
 
 var MsgView = React.createClass({
 	getInitialState() {
+		KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+			this.setState({keyboardSpace: frames.end.height});
+		});
+		KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+			this.setState({keyboardSpace: 0});
+		});
+
 		return {
 			messages: [],
 			inputText: '',
 			dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
 			loading: true,
+			keyboardSpace: 0
 		}
 	},
 
@@ -153,6 +163,7 @@ var MsgView = React.createClass({
 						/>
 					</View>
 				</View>
+				<View style={{height: this.state.keyboardSpace}}></View>
 			</View>
 		);
 
@@ -181,8 +192,7 @@ var styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'transparent',
-    marginTop: 10
+    backgroundColor: 'transparent'
   },
   textInputContainer: {
   	height: 60,
@@ -208,7 +218,8 @@ var styles = StyleSheet.create({
 		borderRadius: 25
   },
 	pillBox: {
-		padding: 20,
+		padding: 10,
+		backgroundColor: CoreStyle.colors.paleBlue
 	}
 });
 
