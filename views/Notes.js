@@ -27,9 +27,6 @@ var Views = {
   Loading: require('./Loading.js')
 };
 
-
-var STATUS = {ENTER: 0, SETUP: 1};
-
 var NotesView = React.createClass({
   getInitialState() {
     return {
@@ -43,18 +40,14 @@ var NotesView = React.createClass({
   },
 
   fetchNote(note) {
-    var authorRelation = note.relation('author');
-    var query = authorRelation.query();
-    return query.find().then(function(list) {
-      var author = list[0];
-      if (author) {
-        return {
-          title: note.get('title'),
-          content: note.get('content'),
-          author: author.get('name'),
-          createdAt: note.createdAt
-        };
-      }
+    var author = note.get('author');
+    return author.fetch().then(function(author) {
+      return {
+        title: note.get('title'),
+        content: note.get('content'),
+        author: author.get('name'),
+        createdAt: note.createdAt
+      };
     });
   },
 

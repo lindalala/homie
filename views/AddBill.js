@@ -96,9 +96,8 @@ var AddBillView = React.createClass({
     var self = this;
     newBill.save().then(function(bill) {
       // sucess
-      var house = bill.relation('house');
       var items = bill.relation('items');
-      house.add(global.curHouse);
+      bill.set('house', global.curHouse);
       var totalAmount = 0;
       for(var i=0; i< self.state.hmCharges.length; i++) {
         var charge = self.state.hmCharges[i];
@@ -115,13 +114,12 @@ var AddBillView = React.createClass({
             // add item to items relation
             items.add(billItem);
             bill.save();
-            var ower = billItem.relation('ower');
             var query = new Parse.Query(Parse.User);
             // query for user with matching ID
             query.equalTo("objectId", charge.id);
             query.find({
               success: function(matchedList) {
-                ower.add(matchedList[0]); // add user to relation
+                billItem.set('ower', matchedList[0]); // add user
                 billItem.save();
               }
             });

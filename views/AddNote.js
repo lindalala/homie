@@ -42,11 +42,8 @@ var AddNoteView = React.createClass({
 
     var self = this;
     note.save().then(function(note) {
-      // house saved successfully.
-      var house = note.relation('house');
-      var author = note.relation('author');
-      house.add(global.curHouse);
-      author.add(global.curUser);
+      note.set('author', global.curUser);
+      note.set('house', global.curHouse);
       return note.save();
     }, function(error) {
       // the save failed.

@@ -99,10 +99,8 @@ var BillItemsView = React.createClass({
   },
 
   fetchItem(item) {
-    var owerRelation = item.relation('ower');
-    var query = owerRelation.query();
-    return query.find().then(function(list) {
-      var ower = list[0];
+    var ower = item.get('ower');
+    return ower.fetch().then(function(ower) {
       return {
         id: item.id,
         amount: item.get('amount'),
