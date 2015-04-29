@@ -154,6 +154,11 @@ CoreStyle.Button = React.createClass({
 });
 
 CoreStyle.CustomPlusButton = React.createClass({
+  getDefaultProps() {
+    return {
+      navBar: true
+    };
+  },
   render() {
     return (
       <TouchableOpacity onPress={this._onPress}>
@@ -166,7 +171,7 @@ CoreStyle.CustomPlusButton = React.createClass({
   },
   _onPress() {
     this.props.navigator.push({
-      navBar: true,
+      navBar: this.props.navBar,
       title: this.props.title,
       sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
       component: this.props.plusView,

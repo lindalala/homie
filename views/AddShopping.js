@@ -13,6 +13,8 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 // App views
 var Views = {};
@@ -20,7 +22,15 @@ Views.Home = require('./Home.js');
 
 var AddShoppingView = React.createClass({
   getInitialState() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({keyboardSpace: frames.end.height});
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({keyboardSpace: 0});
+    });
+
     return {
+      keyboardSpace: 0,
       inputTitle: null
     }
   },

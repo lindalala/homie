@@ -17,6 +17,8 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 // App views
 var Views = {};
@@ -26,10 +28,18 @@ var STATUS = {ENTER: 0, SETUP: 1};
 
 var AddNoteView = React.createClass({
   getInitialState() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({keyboardSpace: frames.end.height});
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({keyboardSpace: 0});
+    });
+
     return {
       inputTitle: null,
       inputText: null,
-      noteAdded: null
+      noteAdded: null,
+      keyboardSpace: 0
     }
   },
 
@@ -73,6 +83,7 @@ var AddNoteView = React.createClass({
           </View>
           <Button onPress={this.addNote} text="post note" />
         </ScrollView>
+        <View style={{height: this.state.keyboardSpace}}></View>
       </View>
     );
   },

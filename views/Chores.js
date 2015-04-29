@@ -19,6 +19,8 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 // App views
 var Views = {};
@@ -29,7 +31,15 @@ var STATUS = {ENTER: 0, SETUP: 1};
 
 var ChoresView = React.createClass({
   getInitialState() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({keyboardSpace: frames.end.height});
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({keyboardSpace: 0});
+    });
+
     return {
+      keyboardSpace: 0,
       dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
       chores: [],
       loading: true,
@@ -208,6 +218,7 @@ var ChoresView = React.createClass({
             style={styles.choreList}
             dataSource={this.state.dataSource}
             renderRow={this.renderChoreCell}/>
+          <View style={{height: this.state.keyboardSpace}}></View>
         </View>);
     }
   }

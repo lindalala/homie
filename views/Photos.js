@@ -103,7 +103,7 @@ var PhotosView = React.createClass({
     return (
       <View style={styles.contentContainer}>
         <NavigationBar navigator={this.props.navigator}
-                       customNext={<CustomPlusButton plusView={Views.AddPhoto} title={'Select Photo'} callPrevView={this.fetchData} />}
+                       customNext={<CustomPlusButton plusView={Views.AddPhoto} navBar={false} title={'Select Photo'} callPrevView={this.fetchData} />}
                        backgroundColor={CoreStyle.colors.lightPurple}
                        title="Photos"
                        titleColor={CoreStyle.colors.mediumBlue} />

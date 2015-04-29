@@ -19,6 +19,8 @@ var {
 } = CoreStyle;
 
 var Parse = require('parse').Parse;
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 // App views
 var Views = {};
@@ -26,7 +28,15 @@ Views.Loading = require('./Loading.js');
 
 var ShoppingItemsView = React.createClass({
   getInitialState() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({keyboardSpace: frames.end.height});
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({keyboardSpace: 0});
+    });
+
     return {
+      keyboardSpace: 0,
       items: [],
       shopList: null,
       dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -206,6 +216,7 @@ var ShoppingItemsView = React.createClass({
             style={styles.itemList}
             dataSource={this.state.dataSource}
             renderRow={this.renderItemCell}/>
+          <View style={{height: this.state.keyboardSpace}}></View>
         </View>);
     }
   }

@@ -23,6 +23,8 @@ var {
 } = CoreStyle;
 var Overlay = require('react-native-overlay');
 var Parse = require('parse').Parse;
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 // App views
 var Views = {};
@@ -32,7 +34,15 @@ var STATUS = {ENTER: 0, SETUP: 1};
 
 var AddBillView = React.createClass({
   getInitialState() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({keyboardSpace: frames.end.height});
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({keyboardSpace: 0});
+    });
+
     return {
+      keyboardSpace: 0,
       isDateModalOpen: false,
       isHousemateModalOpen: false,
       inputTitle: null,
@@ -248,33 +258,36 @@ var AddBillView = React.createClass({
     }
 
     return (
-      <ScrollView style={styles.contentContainer}>
-        <View style={styles.buttonContents}>
-          <CoreStyle.TextInput
-            style={styles.textInput}
-            onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
-            placeholder="Bill Name"
-          />
-          <TouchableOpacity onPress={this.openDateModal}>
-            <View style={styles.pillbox}>
-              <H1 style={styles.fieldTitle}>Due Date</H1>
-              <React.Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</React.Text>
-            </View>
-          </TouchableOpacity>
-          <H3 style={styles.chargeTitle}>Charge Housemates</H3>
-          {hmCharges}
-          <TouchableOpacity onPress={this.openHousemateModal}>
-              <View>
-                <Text style={styles.addHmButton}>
-                  + Add a housemate
-                </Text>
+      <View style={{flex:1}}>
+        <ScrollView style={styles.contentContainer}>
+          <View style={styles.buttonContents}>
+            <CoreStyle.TextInput
+              style={styles.textInput}
+              onChange={(text) => this.setState({inputTitle: text.nativeEvent.text})}
+              placeholder="Bill Name"
+            />
+            <TouchableOpacity onPress={this.openDateModal}>
+              <View style={styles.pillbox}>
+                <H1 style={styles.fieldTitle}>Due Date</H1>
+                <React.Text>{moment(this.state.dueDate).format('D MMMM YYYY')}</React.Text>
               </View>
-          </TouchableOpacity>
-        </View>
-        <Button onPress={this.addBill} text="create bill" />
-        {dateModal}
-        {hmModal}
-      </ScrollView>);
+            </TouchableOpacity>
+            <H3 style={styles.chargeTitle}>Charge Housemates</H3>
+            {hmCharges}
+            <TouchableOpacity onPress={this.openHousemateModal}>
+                <View>
+                  <Text style={styles.addHmButton}>
+                    + Add a housemate
+                  </Text>
+                </View>
+            </TouchableOpacity>
+          </View>
+          <Button onPress={this.addBill} text="create bill" />
+          {dateModal}
+          {hmModal}
+        </ScrollView>
+        <View style={{height: this.state.keyboardSpace}}></View>
+      </View>);
   }
 });
 
